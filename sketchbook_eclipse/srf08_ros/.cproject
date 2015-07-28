@@ -21,7 +21,6 @@
 								<option id="it.baeyens.arduino.compiler.cpp.sketch.option.incpath.523702591" name="Include Paths (-I)" superClass="it.baeyens.arduino.compiler.cpp.sketch.option.incpath" valueType="includePath">
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/srf08_ros/arduino/core}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/srf08_ros/arduino/variant}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/srf08_ros/utility}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/srf08_ros/Libraries/ros_lib}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/srf08_ros/Libraries/Wire}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/srf08_ros/Libraries/Wire/utility}&quot;"/>
@@ -32,7 +31,6 @@
 								<option id="it.baeyens.arduino.compiler.c.sketch.option.incpath.1805222351" name="Include Paths (-I)" superClass="it.baeyens.arduino.compiler.c.sketch.option.incpath" valueType="includePath">
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/srf08_ros/arduino/core}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/srf08_ros/arduino/variant}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/srf08_ros/utility}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/srf08_ros/Libraries/ros_lib}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/srf08_ros/Libraries/Wire}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/srf08_ros/Libraries/Wire/utility}&quot;"/>
