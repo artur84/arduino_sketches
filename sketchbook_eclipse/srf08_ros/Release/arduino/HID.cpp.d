@@ -1,0 +1,32 @@
+arduino/HID.cpp.d: \
+ /home/arturo/arduino-1.6.0/hardware/arduino/avr/cores/arduino/HID.cpp \
+ /home/arturo/arduino-1.6.0/hardware/arduino/avr/cores/arduino/USBAPI.h \
+ /home/arturo/arduino-1.6.0/hardware/arduino/avr/cores/arduino/Arduino.h \
+ /home/arturo/arduino-1.6.0/hardware/arduino/avr/cores/arduino/binary.h \
+ /home/arturo/arduino-1.6.0/hardware/arduino/avr/cores/arduino/WCharacter.h \
+ /home/arturo/arduino-1.6.0/hardware/arduino/avr/cores/arduino/WString.h \
+ /home/arturo/arduino-1.6.0/hardware/arduino/avr/cores/arduino/HardwareSerial.h \
+ /home/arturo/arduino-1.6.0/hardware/arduino/avr/cores/arduino/Stream.h \
+ /home/arturo/arduino-1.6.0/hardware/arduino/avr/cores/arduino/Print.h \
+ /home/arturo/arduino-1.6.0/hardware/arduino/avr/cores/arduino/Printable.h \
+ /home/arturo/arduino-1.6.0/hardware/arduino/avr/variants/standard/pins_arduino.h
+
+/home/arturo/arduino-1.6.0/hardware/arduino/avr/cores/arduino/USBAPI.h:
+
+/home/arturo/arduino-1.6.0/hardware/arduino/avr/cores/arduino/Arduino.h:
+
+/home/arturo/arduino-1.6.0/hardware/arduino/avr/cores/arduino/binary.h:
+
+/home/arturo/arduino-1.6.0/hardware/arduino/avr/cores/arduino/WCharacter.h:
+
+/home/arturo/arduino-1.6.0/hardware/arduino/avr/cores/arduino/WString.h:
+
+/home/arturo/arduino-1.6.0/hardware/arduino/avr/cores/arduino/HardwareSerial.h:
+
+/home/arturo/arduino-1.6.0/hardware/arduino/avr/cores/arduino/Stream.h:
+
+/home/arturo/arduino-1.6.0/hardware/arduino/avr/cores/arduino/Print.h:
+
+/home/arturo/arduino-1.6.0/hardware/arduino/avr/cores/arduino/Printable.h:
+
+/home/arturo/arduino-1.6.0/hardware/arduino/avr/variants/standard/pins_arduino.h:
