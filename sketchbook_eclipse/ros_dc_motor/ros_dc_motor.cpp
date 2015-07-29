@@ -118,6 +118,12 @@ ros::Subscriber<geometry_msgs::Twist> sub("arduino/cmd_vel", cmd_vel_cb);
  */
 void setup() {
 	pinMode(13, OUTPUT);
+	pinMode(LEFT_MOT_NEG, OUTPUT);
+	pinMode(LEFT_MOT_POS, OUTPUT);
+	pinMode(LEFT_MOT_EN, OUTPUT);
+	pinMode(RIGHT_MOT_NEG, OUTPUT);
+	pinMode(RIGHT_MOT_POS, OUTPUT);
+	pinMode(RIGHT_MOT_EN, OUTPUT);
 	nh.initNode();
 	nh.subscribe(sub);
 }
