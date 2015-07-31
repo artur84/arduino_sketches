@@ -13,8 +13,15 @@
 ros::NodeHandle nh;
 std_msgs::String ok_rosstr;
 std_msgs::String callback_rosstr;
+std_msgs::Float32 sonar_msg;
+
 char global_char[10];
 int global_linx=0, global_angz=0;
+
+//in this example pub is declared before the cmd_vel_cb
+//because it used there
+ros::Publisher str_pub("arduino/str_output", &ok_rosstr);
+ros::Publisher sonar_pub("arduino/sonar", &sonar_msg);
 
 /*
  * My functions
@@ -56,30 +63,33 @@ void soft_stop(int motor) {
  * motor: LEFT or RIGHT (0 or 1)
  * speed: a value between -255 and 255 (negative is backward, positive is forward)
  */
-void move_motor(int motor, int speed) {
+void move_motor(int motor, float speed) {
+	int pwm=int(PWM_CALIBRATION*speed);
+	sonar_msg.data=float(pwm);
+	sonar_pub.publish(&sonar_msg); //For debugging
 	if (motor == LEFT) {
-		if (speed >= 1 && speed <= 255) {
+		if (pwm >= 1 && pwm <= 255) {
 			digitalWrite(LEFT_MOT_POS, 1);
 			digitalWrite(LEFT_MOT_NEG, 0);
-			analogWrite(LEFT_MOT_EN, speed);
-		} else if (speed <= 1 && speed >= -255) {
+			analogWrite(LEFT_MOT_EN, pwm);
+		} else if (pwm <= 1 && pwm >= -255) {
 			digitalWrite(LEFT_MOT_POS, 0);
 			digitalWrite(LEFT_MOT_NEG, 1);
-			analogWrite(LEFT_MOT_EN, -1 * speed);
+			analogWrite(LEFT_MOT_EN, -1 * pwm);
 		} else {
 			//Stop if received an wrong direction
 			hard_stop(LEFT);
 		}
 
 	} else if (motor == RIGHT) {
-		if (speed >= 1 && speed <= 255) {
+		if (pwm >= 1 && pwm <= 255) {
 			digitalWrite(RIGHT_MOT_POS, 1);
 			digitalWrite(RIGHT_MOT_NEG, 0);
-			analogWrite(RIGHT_MOT_EN, speed);
-		} else if (speed <= 1 && speed >= -255) {
+			analogWrite(RIGHT_MOT_EN, pwm);
+		} else if (pwm <= 1 && pwm >= -255) {
 			digitalWrite(RIGHT_MOT_POS, 0);
 			digitalWrite(RIGHT_MOT_NEG, 1);
-			analogWrite(RIGHT_MOT_EN, -1 * speed);
+			analogWrite(RIGHT_MOT_EN, -1 * pwm);
 		} else {
 			//Stop if received an wrong direction
 			hard_stop(RIGHT);
@@ -90,22 +100,21 @@ void move_motor(int motor, int speed) {
 
 
 void move_robot(float linearx, float angularz) {
-	int linear_speed = 50 * linearx;    //linear x should be maximum 4
-	int angular_speed = 50 * angularz;
-	if (angular_speed == 0) { //Robot moves straight
-		move_motor(LEFT, linear_speed); // turn it on going backward
-		move_motor(RIGHT, linear_speed); // turn it on going backward
+	float v = linearx;    //linear x should be maximum 4
+	float w = angularz;   //angular speed
+	//Differential drive robot equations
+	float vr = ((2*v+L*w)/2*R);
+	float vl = ((2*v-L*w)/2*R);
+	sonar_msg.data = vr;
+	sonar_pub.publish(&sonar_msg);
 
-	} else { //Robot turns clockwise if angular speed is negative
-		move_motor(LEFT, -angular_speed);
-		move_motor(RIGHT, angular_speed);
-	}
+	move_motor(LEFT, vr); // turn it on going backward
+	move_motor(RIGHT, vl); // turn it on going backward
+
 }
 
 
-//in this example pub is declared before the cmd_vel_cb
-//because it used there
-ros::Publisher str_pub("arduino/str_output", &ok_rosstr);
+
 
 //Twist callback
 void cmd_vel_cb(const geometry_msgs::Twist& cmd_msg) {
@@ -115,17 +124,9 @@ void cmd_vel_cb(const geometry_msgs::Twist& cmd_msg) {
 	global_angz = cmd_msg.angular.z;
 }
 
-//String callback
-void str_cb(const std_msgs::String& msg) {
-	digitalWrite(LED, HIGH - digitalRead(LED));   // blink the led
-	strcpy(global_char, msg.data);
-	str_pub.publish(&msg);
-}
-
 //Creates the ROS publishers and subscribers
 ros::Subscriber<geometry_msgs::Twist> cmd_vel_sub("arduino/cmd_vel",
 		cmd_vel_cb);
-ros::Subscriber<std_msgs::String> str_sub("arduino/str_input", str_cb);
 /*
  * Arduino SETUP
  */
@@ -133,8 +134,8 @@ void setup() {
 	nh.getHardware()->setBaud(57600); //The HC06 and 05 use by default 9600 baud rate
 	nh.initNode();
 	nh.subscribe(cmd_vel_sub);
-	nh.subscribe(str_sub);
 	nh.advertise(str_pub);
+	nh.advertise(sonar_pub);
 	ok_rosstr.data = "arduino ok";
 	callback_rosstr.data = "cb executed";
 	pinMode(LED, OUTPUT);
@@ -144,6 +145,7 @@ void setup() {
 	pinMode(RIGHT_MOT_NEG, OUTPUT);
 	pinMode(RIGHT_MOT_POS, OUTPUT);
 	pinMode(RIGHT_MOT_EN, OUTPUT);
+	str_pub.publish(&ok_rosstr);
 
 }
 
@@ -153,11 +155,14 @@ void setup() {
 void loop() {
 	//I will just keep the loop waiting for a message
 	//in the ros topic
+	str_pub.publish(&ok_rosstr);
 	if (!(millis() % 10)) {//Control the motors every 10ms aprox.
 	move_robot(global_linx, global_angz);
+
 	}
 	if (!(millis() % 3000)) {//Say I'm ok once in a while
 		str_pub.publish(&ok_rosstr);
+		sonar_pub.publish(&sonar_msg);
 		nh.spinOnce();
 	}
 	nh.spinOnce();
