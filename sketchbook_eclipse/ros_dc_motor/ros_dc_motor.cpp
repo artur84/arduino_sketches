@@ -11,6 +11,10 @@
  * Global variables
  */
 ros::NodeHandle nh;
+std_msgs::String ok_rosstr;
+std_msgs::String callback_rosstr;
+char global_char[10];
+
 
 /*
  * My functions
@@ -91,9 +95,14 @@ void soft_stop(int motor) {
 	}
 }
 
+//in this example pub is declared befor the cmd_vel_cb
+//because it used there
+ros::Publisher str_pub("arduino/str_output",&ok_rosstr);
+
 //Twist callback
 void cmd_vel_cb(const geometry_msgs::Twist& cmd_msg) {
-	digitalWrite(13, HIGH - digitalRead(13));  //toggles a led
+	digitalWrite(13, HIGH - digitalRead(13)); //toggles a led
+	str_pub.publish(&callback_rosstr);
 	float x = cmd_msg.linear.x;
 	int motor_speed = 55 + 50 * x;    //linear x should be maximum 4
 
@@ -110,13 +119,27 @@ void cmd_vel_cb(const geometry_msgs::Twist& cmd_msg) {
 	}
 }
 
-//Creates the ROS subscriber
-ros::Subscriber<geometry_msgs::Twist> sub("arduino/cmd_vel", cmd_vel_cb);
+//String callback
+void str_cb( const std_msgs::String& msg){
+  digitalWrite(13, HIGH-digitalRead(13));   // blink the led
+  strcpy(global_char, msg.data);
+  str_pub.publish(&msg);
+}
 
+//Creates the ROS publishers and subscribers
+ros::Subscriber<geometry_msgs::Twist> cmd_vel_sub("arduino/cmd_vel", cmd_vel_cb);
+ros::Subscriber<std_msgs::String> str_sub("arduino/str_input", str_cb);
 /*
  * Arduino SETUP
  */
 void setup() {
+	nh.getHardware()->setBaud(57600); //The HC06 and 05 use by default 9600 baud rate
+	nh.initNode();
+	nh.subscribe(cmd_vel_sub);
+	nh.subscribe(str_sub);
+	nh.advertise(str_pub);
+	ok_rosstr.data = "arduino ok";
+	callback_rosstr.data = "cb executed";
 	pinMode(13, OUTPUT);
 	pinMode(LEFT_MOT_NEG, OUTPUT);
 	pinMode(LEFT_MOT_POS, OUTPUT);
@@ -124,8 +147,7 @@ void setup() {
 	pinMode(RIGHT_MOT_NEG, OUTPUT);
 	pinMode(RIGHT_MOT_POS, OUTPUT);
 	pinMode(RIGHT_MOT_EN, OUTPUT);
-	nh.initNode();
-	nh.subscribe(sub);
+
 }
 
 /*
@@ -134,6 +156,12 @@ void setup() {
 void loop() {
 	//I will just keep the loop waiting for a message
 	//in the ros topic
+	nh.spinOnce();
+	nh.spinOnce();
+	if (!(millis()%3000)){
+	    str_pub.publish(&ok_rosstr);
+	    nh.spinOnce();
+	  }
 	nh.spinOnce();
 	delay(1);
 }

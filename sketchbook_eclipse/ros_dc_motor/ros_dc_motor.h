@@ -9,17 +9,18 @@
 #include "Arduino.h"
 #include <ros.h>
 #include <geometry_msgs/Twist.h>
+#include <std_msgs/String.h>
 //add your includes for the project ros_dc_motor here
 
 /*******************************
  * Define the material
  ******************************/
 #define RIGHT_MOT_POS 2
-#define RIGHT_MOT_NEG 3
-#define RIGHT_MOT_EN 5 //enable
-#define LEFT_MOT_POS 4
-#define LEFT_MOT_NEG 7
-#define LEFT_MOT_EN 6 //enable
+#define RIGHT_MOT_NEG 7
+#define RIGHT_MOT_EN 6 //enable
+#define LEFT_MOT_POS 3
+#define LEFT_MOT_NEG 4
+#define LEFT_MOT_EN 5 //enable
 #define BACKWARD -1  //moves backwards
 #define FORWARD 1
 #define LEFT 1

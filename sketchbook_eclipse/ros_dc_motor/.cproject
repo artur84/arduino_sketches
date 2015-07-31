@@ -21,7 +21,6 @@
 								<option id="it.baeyens.arduino.compiler.cpp.sketch.option.incpath.49646995" name="Include Paths (-I)" superClass="it.baeyens.arduino.compiler.cpp.sketch.option.incpath" valueType="includePath">
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/ros_dc_motor/arduino/core}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/ros_dc_motor/arduino/variant}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/ros_dc_motor/Libraries/AFMotor}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/ros_dc_motor/Libraries/ros_lib}&quot;"/>
 								</option>
 								<inputType id="it.baeyens.arduino.compiler.cpp.sketch.input.1244081943" name="CPP source files" superClass="it.baeyens.arduino.compiler.cpp.sketch.input"/>
@@ -30,7 +29,6 @@
 								<option id="it.baeyens.arduino.compiler.c.sketch.option.incpath.1216358441" name="Include Paths (-I)" superClass="it.baeyens.arduino.compiler.c.sketch.option.incpath" valueType="includePath">
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/ros_dc_motor/arduino/core}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/ros_dc_motor/arduino/variant}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/ros_dc_motor/Libraries/AFMotor}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/ros_dc_motor/Libraries/ros_lib}&quot;"/>
 								</option>
 								<inputType id="it.baeyens.arduino.compiler.c.sketch.input.496226667" name="C Source Files" superClass="it.baeyens.arduino.compiler.c.sketch.input"/>
