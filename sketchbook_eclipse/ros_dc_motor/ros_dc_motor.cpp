@@ -15,52 +15,9 @@ std_msgs::String ok_rosstr;
 std_msgs::String callback_rosstr;
 char global_char[10];
 
-
 /*
  * My functions
  */
-/* Moves the left wheel forward
- * motor: LEFT or RIGHT (0 or 1)
- * dir: FORWARD or BACKWARD (+1 or -1) to choose the motor direction
- * speed: a value between 0 and 255
- */
-void move_motor(int motor, int dir, int speed) {
-	if (motor == LEFT) {
-		if (dir == FORWARD) {
-			digitalWrite(LEFT_MOT_POS, 1);
-			digitalWrite(LEFT_MOT_NEG, 0);
-			analogWrite(LEFT_MOT_EN, speed);
-		} else if (dir == BACKWARD) {
-			digitalWrite(LEFT_MOT_POS, 0);
-			digitalWrite(LEFT_MOT_NEG, 1);
-			analogWrite(LEFT_MOT_EN, speed);
-		} else {
-			//Stop if received an wrong direction
-			digitalWrite(LEFT_MOT_POS, 0);
-			digitalWrite(LEFT_MOT_NEG, 0);
-			analogWrite(LEFT_MOT_EN, 0);
-		}
-
-	} else if (motor == RIGHT) {
-		if (dir == FORWARD) {
-			digitalWrite(RIGHT_MOT_POS, 1);
-			digitalWrite(RIGHT_MOT_NEG, 0);
-			analogWrite(RIGHT_MOT_EN, speed);
-		} else if (dir == BACKWARD) {
-			digitalWrite(RIGHT_MOT_POS, 0);
-			digitalWrite(RIGHT_MOT_NEG, 1);
-			analogWrite(RIGHT_MOT_EN, speed);
-		} else {
-			//Stop if received an wrong direction
-			digitalWrite(RIGHT_MOT_POS, 0);
-			digitalWrite(RIGHT_MOT_NEG, 0);
-			analogWrite(RIGHT_MOT_EN, 0);
-		}
-
-	}
-
-}
-
 /* Hard stop of motor
  * motor: LEFT or RIGHT (0 or 1)
  */
@@ -94,40 +51,79 @@ void soft_stop(int motor) {
 		analogWrite(RIGHT_MOT_EN, 0);
 	}
 }
+/* Moves the left wheel forward
+ * motor: LEFT or RIGHT (0 or 1)
+ * speed: a value between -255 and 255 (negative is backward, positive is forward)
+ */
+void move_motor(int motor, int speed) {
+	if (motor == LEFT) {
+		if (speed >= 1 && speed <= 255) {
+			digitalWrite(LEFT_MOT_POS, 1);
+			digitalWrite(LEFT_MOT_NEG, 0);
+			analogWrite(LEFT_MOT_EN, speed);
+		} else if (speed <= 1 && speed >= -255) {
+			digitalWrite(LEFT_MOT_POS, 0);
+			digitalWrite(LEFT_MOT_NEG, 1);
+			analogWrite(LEFT_MOT_EN, -1 * speed);
+		} else {
+			//Stop if received an wrong direction
+			hard_stop(LEFT);
+		}
 
-//in this example pub is declared befor the cmd_vel_cb
+	} else if (motor == RIGHT) {
+		if (speed >= 1 && speed <= 255) {
+			digitalWrite(RIGHT_MOT_POS, 1);
+			digitalWrite(RIGHT_MOT_NEG, 0);
+			analogWrite(RIGHT_MOT_EN, speed);
+		} else if (speed <= 1 && speed >= -255) {
+			digitalWrite(RIGHT_MOT_POS, 0);
+			digitalWrite(RIGHT_MOT_NEG, 1);
+			analogWrite(RIGHT_MOT_EN, -1 * speed);
+		} else {
+			//Stop if received an wrong direction
+			hard_stop(RIGHT);
+		}
+	}
+}
+
+
+
+void move_robot(float linearx, float angularz) {
+	int linear_speed = 50 * linearx;    //linear x should be maximum 4
+	int angular_speed = 50 * angularz;
+	if (angular_speed == 0) { //Robot moves straight
+		move_motor(LEFT, linear_speed); // turn it on going backward
+		move_motor(RIGHT, linear_speed); // turn it on going backward
+
+	} else { //Robot turns to the left
+		move_motor(LEFT, angular_speed);
+		move_motor(RIGHT,-angular_speed);
+	}
+}
+
+
+//in this example pub is declared before the cmd_vel_cb
 //because it used there
-ros::Publisher str_pub("arduino/str_output",&ok_rosstr);
+ros::Publisher str_pub("arduino/str_output", &ok_rosstr);
 
 //Twist callback
 void cmd_vel_cb(const geometry_msgs::Twist& cmd_msg) {
 	digitalWrite(13, HIGH - digitalRead(13)); //toggles a led
 	str_pub.publish(&callback_rosstr);
-	float x = cmd_msg.linear.x;
-	int motor_speed = 55 + 50 * x;    //linear x should be maximum 4
+	move_robot(cmd_msg.linear.x, cmd_msg.angular.z);
 
-	if ((x < 0) && (x >= -4)) {
-		move_motor(LEFT, BACKWARD, motor_speed); // turn it on going backward
-		move_motor(RIGHT, BACKWARD, motor_speed); // turn it on going backward
-	} else if ((x > 0) && (x <= 4)) {
-		move_motor(LEFT, FORWARD, motor_speed); // turn it on going forward
-		move_motor(RIGHT, FORWARD, motor_speed); // turn it on going forward
-	} else { //Stop if 0 or a value out of boundaries is sent
-		motor_speed = 0;
-		hard_stop(LEFT);
-		soft_stop(RIGHT);
-	}
 }
 
 //String callback
-void str_cb( const std_msgs::String& msg){
-  digitalWrite(13, HIGH-digitalRead(13));   // blink the led
-  strcpy(global_char, msg.data);
-  str_pub.publish(&msg);
+void str_cb(const std_msgs::String& msg) {
+	digitalWrite(13, HIGH - digitalRead(13));   // blink the led
+	strcpy(global_char, msg.data);
+	str_pub.publish(&msg);
 }
 
 //Creates the ROS publishers and subscribers
-ros::Subscriber<geometry_msgs::Twist> cmd_vel_sub("arduino/cmd_vel", cmd_vel_cb);
+ros::Subscriber<geometry_msgs::Twist> cmd_vel_sub("arduino/cmd_vel",
+		cmd_vel_cb);
 ros::Subscriber<std_msgs::String> str_sub("arduino/str_input", str_cb);
 /*
  * Arduino SETUP
@@ -158,10 +154,10 @@ void loop() {
 	//in the ros topic
 	nh.spinOnce();
 	nh.spinOnce();
-	if (!(millis()%3000)){
-	    str_pub.publish(&ok_rosstr);
-	    nh.spinOnce();
-	  }
+	if (!(millis() % 3000)) {
+		str_pub.publish(&ok_rosstr);
+		nh.spinOnce();
+	}
 	nh.spinOnce();
 	delay(1);
 }
