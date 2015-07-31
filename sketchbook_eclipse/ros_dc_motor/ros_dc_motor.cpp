@@ -14,6 +14,7 @@ ros::NodeHandle nh;
 std_msgs::String ok_rosstr;
 std_msgs::String callback_rosstr;
 char global_char[10];
+int global_linx=0, global_angz=0;
 
 /*
  * My functions
@@ -95,9 +96,9 @@ void move_robot(float linearx, float angularz) {
 		move_motor(LEFT, linear_speed); // turn it on going backward
 		move_motor(RIGHT, linear_speed); // turn it on going backward
 
-	} else { //Robot turns to the left
-		move_motor(LEFT, angular_speed);
-		move_motor(RIGHT,-angular_speed);
+	} else { //Robot turns clockwise if angular speed is negative
+		move_motor(LEFT, -angular_speed);
+		move_motor(RIGHT, angular_speed);
 	}
 }
 
@@ -108,15 +109,15 @@ ros::Publisher str_pub("arduino/str_output", &ok_rosstr);
 
 //Twist callback
 void cmd_vel_cb(const geometry_msgs::Twist& cmd_msg) {
-	digitalWrite(13, HIGH - digitalRead(13)); //toggles a led
+	digitalWrite(LED, HIGH - digitalRead(LED)); //toggles a led
 	str_pub.publish(&callback_rosstr);
-	move_robot(cmd_msg.linear.x, cmd_msg.angular.z);
-
+	global_linx = cmd_msg.linear.x;
+	global_angz = cmd_msg.angular.z;
 }
 
 //String callback
 void str_cb(const std_msgs::String& msg) {
-	digitalWrite(13, HIGH - digitalRead(13));   // blink the led
+	digitalWrite(LED, HIGH - digitalRead(LED));   // blink the led
 	strcpy(global_char, msg.data);
 	str_pub.publish(&msg);
 }
@@ -136,7 +137,7 @@ void setup() {
 	nh.advertise(str_pub);
 	ok_rosstr.data = "arduino ok";
 	callback_rosstr.data = "cb executed";
-	pinMode(13, OUTPUT);
+	pinMode(LED, OUTPUT);
 	pinMode(LEFT_MOT_NEG, OUTPUT);
 	pinMode(LEFT_MOT_POS, OUTPUT);
 	pinMode(LEFT_MOT_EN, OUTPUT);
@@ -152,9 +153,10 @@ void setup() {
 void loop() {
 	//I will just keep the loop waiting for a message
 	//in the ros topic
-	nh.spinOnce();
-	nh.spinOnce();
-	if (!(millis() % 3000)) {
+	if (!(millis() % 10)) {//Control the motors every 10ms aprox.
+	move_robot(global_linx, global_angz);
+	}
+	if (!(millis() % 3000)) {//Say I'm ok once in a while
 		str_pub.publish(&ok_rosstr);
 		nh.spinOnce();
 	}

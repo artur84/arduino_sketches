@@ -25,6 +25,7 @@
 #define FORWARD 1
 #define LEFT 1
 #define RIGHT 0
+#define LED 13 //A led that blinks when receiving a message in any topic
 
 //end of add your includes here
 #ifdef __cplusplus
