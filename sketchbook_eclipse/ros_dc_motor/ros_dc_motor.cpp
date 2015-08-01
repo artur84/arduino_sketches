@@ -13,7 +13,6 @@
 ros::NodeHandle nh;
 std_msgs::String ok_rosstr;
 std_msgs::String callback_rosstr;
-char global_char[10];
 float global_linx=0, global_angz=0;
 
 /*
@@ -91,15 +90,15 @@ void move_motor(int motor, float speed) {
 
 
 void move_robot(float linearx, float angularz) {
-	float linear_speed = 50 * linearx;    //linear x should be maximum 4
-	float angular_speed = 50 * angularz;
-	if (angular_speed == 0) { //Robot moves straight
-		move_motor(LEFT, linear_speed); // turn it on going backward
-		move_motor(RIGHT, linear_speed); // turn it on going backward
+	float vr = 50.0 * linearx;    //linear x should be maximum 4
+	float vl = 50.0 * angularz;
+	if (angularz == 0) { //Robot moves straight
+		move_motor(LEFT, vr); // turn it on going backward
+		move_motor(RIGHT, vr); // turn it on going backward
 
 	} else { //Robot turns clockwise if angular speed is negative
-		move_motor(LEFT, -angular_speed);
-		move_motor(RIGHT, angular_speed);
+		move_motor(LEFT, vr);
+		move_motor(RIGHT, vl);
 	}
 }
 
@@ -117,16 +116,9 @@ void cmd_vel_cb(const geometry_msgs::Twist& cmd_msg) {
 }
 
 //String callback
-void str_cb(const std_msgs::String& msg) {
-	digitalWrite(LED, HIGH - digitalRead(LED));   // blink the led
-	strcpy(global_char, msg.data);
-	str_pub.publish(&msg);
-}
-
 //Creates the ROS publishers and subscribers
 ros::Subscriber<geometry_msgs::Twist> cmd_vel_sub("arduino/cmd_vel",
 		cmd_vel_cb);
-ros::Subscriber<std_msgs::String> str_sub("arduino/str_input", str_cb);
 /*
  * Arduino SETUP
  */
@@ -134,7 +126,6 @@ void setup() {
 	nh.getHardware()->setBaud(57600); //The HC06 and 05 use by default 9600 baud rate
 	nh.initNode();
 	nh.subscribe(cmd_vel_sub);
-	nh.subscribe(str_sub);
 	nh.advertise(str_pub);
 	ok_rosstr.data = "arduino ok";
 	callback_rosstr.data = "cb executed";
