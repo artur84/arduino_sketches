@@ -10,6 +10,7 @@
 #include <ros.h>
 #include <geometry_msgs/Twist.h>
 #include <std_msgs/String.h>
+//#include <std_msgs/Int16.h>
 //add your includes for the project ros_dc_motor here
 
 /*******************************
@@ -26,7 +27,8 @@
 #define LEFT 1
 #define RIGHT 0
 #define LED 13 //A led that blinks when receiving a message in any topic
-
+#define WHEELRAD 0.015 //The radius of the wheel (m)
+#define WHEELDIST 0.11 //Distance between wheels (m)
 //end of add your includes here
 #ifdef __cplusplus
 extern "C" {
