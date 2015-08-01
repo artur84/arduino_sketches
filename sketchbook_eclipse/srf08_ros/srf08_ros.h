@@ -7,11 +7,10 @@
 #ifndef _srf08_ros_H_
 #define _srf08_ros_H_
 #include "Arduino.h"
-#include <Wire.h>
 #include <ros.h>
+#include <Wire.h>
 #include <std_msgs/Float32.h>
 //add your includes for the project srf08_ros here
-
 
 //end of add your includes here
 #ifdef __cplusplus
@@ -24,9 +23,6 @@ void setup();
 #endif
 
 //add your function definitions for the project srf08_ros here
-
-
-
 
 //Do not add code below this line
 #endif /* _srf08_ros_H_ */
