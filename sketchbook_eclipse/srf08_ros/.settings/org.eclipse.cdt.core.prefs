@@ -313,7 +313,7 @@ environment/project/it.baeyens.arduino.core.toolChain.release.1473226779/JANTJE.
 environment/project/it.baeyens.arduino.core.toolChain.release.1473226779/JANTJE.BOARD_NAME/value=Arduino Uno
 environment/project/it.baeyens.arduino.core.toolChain.release.1473226779/JANTJE.COM_PORT/delimiter=\:
 environment/project/it.baeyens.arduino.core.toolChain.release.1473226779/JANTJE.COM_PORT/operation=replace
-environment/project/it.baeyens.arduino.core.toolChain.release.1473226779/JANTJE.COM_PORT/value=/dev/ttyACM0
+environment/project/it.baeyens.arduino.core.toolChain.release.1473226779/JANTJE.COM_PORT/value=/dev/ttyACM1
 environment/project/it.baeyens.arduino.core.toolChain.release.1473226779/JANTJE.EXTRA.C.COMPILE/delimiter=\:
 environment/project/it.baeyens.arduino.core.toolChain.release.1473226779/JANTJE.EXTRA.C.COMPILE/operation=replace
 environment/project/it.baeyens.arduino.core.toolChain.release.1473226779/JANTJE.EXTRA.C.COMPILE/value=
