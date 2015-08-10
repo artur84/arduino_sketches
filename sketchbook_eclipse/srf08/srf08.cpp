@@ -23,8 +23,8 @@ void setup() {
 	Serial.println("SONAR 08");
 	Serial.println("Previous Address:");
 	Serial.println(New_Address);
-	sonar.changeAddress(CommandRegister, New_Address);	//Don't delete this!!
-	New_Address += 4;	//Somehow it is necessary
+	sonar.changeAddress(New_Address);	//Don't delete this!!
+
 	//Initialize serial and wait for port to open:
 	Serial.println("Address:");
 	Serial.println(New_Address);
@@ -40,13 +40,13 @@ void loop() {
 		Serial.println("Address:");
 		Serial.println(New_Address);
 		// step 1: request reading from sensor
-		sonar.setUnit(CommandRegister, New_Address);
+		sonar.setUnit(CommandRegister);
 
 		// set register for reading
-		sonar.setRegister(New_Address, ResultRegister);
+		sonar.setRegister(New_Address);
 
 		// read data from result register
-		sensorReading = sonar.readData(New_Address, 2);
+		sensorReading = sonar.readData(2);
 
 		//Publish to serial monitor
 		Serial.println("Range:");
