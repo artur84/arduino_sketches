@@ -41,8 +41,8 @@ public:
 	virtual ~Sonar();
 	void connect();
 	void sendCommand(int address, int commandRegister, int command);
-	// Sets Units for display / storage
-	void setUnit();
+	// Starts a reading in cm
+	void startReadingCM();
 	// Sets maximum range of measurements
 	void setMaxRange11m();
 	// Set to read off the register with stored result

@@ -21,7 +21,10 @@ void Sonar::connect() {
 	Wire.begin();
 }
 
-// Communicates with Sonar to send commands
+/* Communicates with Sonar to send commands
+ *
+ * It is necessary to specify the tipe of each variable sent using wire otherwise it fails
+ */
 void Sonar::sendCommand(int address, int commandRegister, int command) {
 	// start I2C transmission:
 	Wire.beginTransmission(address);
@@ -36,8 +39,7 @@ void Sonar::sendCommand(int address, int commandRegister, int command) {
  * Starts a measurement, don't forget to wait at least 70ms
  * before calling readResult()
  */
-// Sets Units for display / storage
-void Sonar::setUnit() {
+void Sonar::startReadingCM() {
 	//Serial.println("Ask a reading in centimeters");
 	Sonar::sendCommand(address_, SONAR_COMMAND_REG, SONAR_MODE_CM);
 	//pause (the sonar datasheet recquires 65 ms)

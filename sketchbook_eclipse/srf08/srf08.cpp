@@ -8,7 +8,7 @@
 #define CommandRegister 0x00
 #define ResultRegister  0x02
 int New_Address = 248; //0xF8
-float sensorReading = 0;
+int sensor_reading = 0;
 Sonar sonar;
 /*************************************
  * Arduino Setup
@@ -39,17 +39,17 @@ void loop() {
 		Serial.println("Address:");
 		Serial.println(New_Address);
 		// step 1: request reading from sensor
-		sonar.setUnit();
+		sonar.startReadingCM();
 
 		// set register for reading
 		sonar.setRegister(ResultRegister);
 
 		// read data from result register
-		sensorReading = sonar.readData(2);
+		sensor_reading = sonar.readData(2);
 
 		//Publish to serial monitor
 		Serial.println("Range:");
-		Serial.println(sensorReading);
+		Serial.println(sensor_reading);
 		//publish twice a second (aprox.)
 		publisher_timer = millis() + 500;
 
