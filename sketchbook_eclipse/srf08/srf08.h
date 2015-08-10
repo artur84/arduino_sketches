@@ -6,11 +6,9 @@
 
 #ifndef _srf08_H_
 #define _srf08_H_
-#include "Arduino.h"
 //add your includes for the project srf08 here
+#include "Arduino.h"
 #include <Wire.h>
-#include <SoftwareSerial.h>
-
 
 //end of add your includes here
 #ifdef __cplusplus
@@ -23,9 +21,6 @@ void setup();
 #endif
 
 //add your function definitions for the project srf08 here
-
-
-
 
 //Do not add code below this line
 #endif /* _srf08_H_ */

@@ -1,35 +1,13 @@
 // Do not remove the include below
 #include "srf08.h"
 /*
- * This program gets the reading from a SRF08 sonar (in centimeters)
- * This is a modification of the source code found at ROS web-page
- * http://wiki.ros.org/rosserial_arduino/Tutorials/SRF08%20Ultrasonic%20Range%20Finder
- * The code has been adapted to be used with newer Arduino Versions.
- * Mantainer: arturoescobedo.iq@gmail.com
- */
 
-/**********************************
+ /**********************************
  *  Functions to control the SONAR
  **********************************/
 #define CommandRegister 0x00
-#define LightSensorRegister 0x00
-#define GainRegister 0x01
-#define ResultRegisterHigh  0x02//Register 2 is used to store the MSB of the sensor readings
-#define ResultRegisterLow  0x03//Register 3 is used to store the LSB of the sensor readings
-#define RangeRegister 0x02 //Register 2 is used to set the max range during write
-
-#define ModeInches 0x50
-#define ModeCentimeters 0x51
-#define ModeMicroSeconds 0x52
-
-#define SensorAddress 0xF8 //the address of my sensor
-#define BroadcastAddress 0x00
-
-#define Range43mm 0x00
-#define Range86mm 0x01
-#define Range1m   0x18
-#define Range6m   0x8C
-
+#define ResultRegister  0x02
+int New_Address = 248; //0xF8
 float sensorReading = 0;
 
 void connect() {
@@ -50,25 +28,10 @@ void sendCommand(int commandRegister, int address, int command) {
 
 // Sets Units for display / storage
 void setUnit(int commandRegister, int address) {
-	Serial.println("Ask a reading in centimeters");
-	sendCommand(commandRegister, address, 0x51); //centimeters
-	//Serial.println("Ask a reading in inches");
-	//sendCommand(commandRegister, address, 0x50); //inches
-	delay(70);
-
-}
-
-// Sets maximum range of measurements
-void setMaxRange(int address) {
 	//Serial.println("Ask a reading in centimeters");
-	//sendCommand(commandRegister, address, 0x51); //centimeters
-
-	Serial.println("Setting maximum range");
-	//max range can be The range is ((Range Register x 43mm) + 43mm) so setting the Range Register to 0 (0x00) gives a maximum
-	//range of 43mm. Setting the Range Register to 1 (0x01) gives a maximum range of 86mm. More usefully, 24
-	//(0x18) gives a range of 1 metre and 140 (0x8C) is 6 metres. Setting 255 (0xFF) gives the original 11 metres
-	//(255 x 43 + 43 is 11008mm). There are two reasons you may wish to reduce the range.
-	sendCommand(RangeRegister, address, 0xFF); //(0x8C is 6 metres)
+	sendCommand(commandRegister, address, 0x51);
+	//pause (the sonar datasheet recquires 65 ms)
+	delay(70);
 }
 
 // Set to read off the register with stored result
@@ -97,6 +60,7 @@ int readData(int address, int numBytes) {
 	// return the result:
 	return result;
 }
+
 // Optional change Address -
 // NEW_ADDRESS can be set to any of
 // E0, E2, E4, E6, E8, EA, EC, EE
@@ -111,25 +75,19 @@ void changeAddress(int commandRegister, int NEW_ADDRESS) {
 /*************************************
  * Arduino Setup
  **************************************/
-int address = 0xF8; //0xF8
-int ResultRegister = 0x02;
 void setup() {
+	connect();
+	changeAddress(CommandRegister, New_Address);	//Don't delete this!!
+	New_Address += 4;	//Somehow it is necessary
 	//Initialize serial and wait for port to open:
 	Serial.begin(9600);
 	while (!Serial) {
 		; // wait for serial port to connect. Needed for Leonardo only
 	}
-	connect();
-	delay(100); //waits to make sure everything is ok befor
-	// prints title with ending line break
+	delay(5000); //Wait for some seconds to wait serial monitor
 	Serial.println("SONAR 08");
 	Serial.println("Address:");
-	Serial.println(address);
-
-	//changeAddress(CommandRegister, New_Address);
-
-	//setMaxRange(New_Address);
-
+	Serial.println(New_Address);
 }
 
 /***********************************
@@ -138,18 +96,22 @@ void setup() {
 long publisher_timer;
 
 void loop() {
-	// step 1: request reading from sensor
-	setUnit(CommandRegister, address);
+	if (millis() > publisher_timer) {
 
-	//pause
-	delay(70);
+		// step 1: request reading from sensor
+		setUnit(CommandRegister, New_Address);
 
-	// set register for reading
-	setRegister(address, ResultRegister);
+		// set register for reading
+		setRegister(New_Address, ResultRegister);
 
-	// read data from result register
-	sensorReading = readData(address, 2);
+		// read data from result register
+		sensorReading = readData(New_Address, 2);
 
-	publisher_timer = millis() + 4000; //publish once a second
+		//Publish to serial monitor
+		Serial.println("Range:");
+		Serial.println(sensorReading);
+		//publish twice a second (aprox.)
+		publisher_timer = millis() + 500;
 
+	}
 }
