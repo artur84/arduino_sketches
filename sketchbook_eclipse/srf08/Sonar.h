@@ -26,7 +26,7 @@
 #define SONAR_CHANGE_ADD_SECOND 0xAA //Second in sequence to change I2C address
 #define SONAR_CHANGE_ADD_THIRD 0xA5 //Third in sequence to change I2C address
 
-#define SONAR_DEFAULT_ADD 0xF8 //the address of my sensor
+#define SONAR_DEFAULT_ADD 248 //the address of my sensor
 #define SONAR_BCAST_ADD 0x00
 
 #define SONAR_RANGE43MM 0x00
@@ -42,13 +42,13 @@ public:
 	void connect();
 	void sendCommand(int address, int commandRegister, int command);
 	// Sets Units for display / storage
-	void setUnit(int commandRegister, int address);
+	void setUnit();
 	// Sets maximum range of measurements
 	void setMaxRange11m();
 	// Set to read off the register with stored result
-	void setRegister(int address, int thisRegister);
+	void setRegister(int thisRegister);
 	// Read data from register return result
-	int readData(int address, int numBytes);
+	int readData(int numBytes);
 	// Optional change Address -
 	// NEW_ADDRESS can be set to any of
 	// E0, E2, E4, E6, E8, EA, EC, EE

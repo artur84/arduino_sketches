@@ -37,9 +37,9 @@ void Sonar::sendCommand(int address, int commandRegister, int command) {
  * before calling readResult()
  */
 // Sets Units for display / storage
-void Sonar::setUnit(int commandRegister, int address) {
+void Sonar::setUnit() {
 	//Serial.println("Ask a reading in centimeters");
-	Sonar::sendCommand(address, commandRegister, 0x51);
+	Sonar::sendCommand(address_, SONAR_COMMAND_REG, SONAR_MODE_CM);
 	//pause (the sonar datasheet recquires 65 ms)
 	delay(70);
 }
@@ -54,9 +54,9 @@ void Sonar::setUnit(int commandRegister, int address) {
 //}
 
 // Set to read off the register with stored result
-void Sonar::setRegister(int address, int thisRegister) {
+void Sonar::setRegister(int thisRegister) {
 	// start I2C transmission:
-	Wire.beginTransmission(address);
+	Wire.beginTransmission(address_);
 	// send address to read from:
 	Wire.write(thisRegister);
 	// end I2C transmission:
@@ -68,10 +68,10 @@ void Sonar::setRegister(int address, int thisRegister) {
  * calling this.
  */
 // Read data from register return result
-int Sonar::readData(int address, int numBytes) {
+int Sonar::readData(int numBytes) {
 	int result = 0;        // the result is two bytes long
 	// send I2C request for data:
-	Wire.requestFrom(address, numBytes);
+	Wire.requestFrom(address_, numBytes);
 	// wait for two bytes to return:
 	while (Wire.available() < 2) {
 		// wait for result
@@ -96,6 +96,7 @@ void Sonar::changeAddress(int NEW_ADDRESS) {
 	sendCommand(SONAR_BCAST_ADD, SONAR_COMMAND_REG, 0xAA);
 	sendCommand(SONAR_BCAST_ADD, SONAR_COMMAND_REG, 0xA5);
 	sendCommand(SONAR_BCAST_ADD, SONAR_COMMAND_REG, NEW_ADDRESS);
+	address_ = NEW_ADDRESS + 4;
 }
 
 /*
