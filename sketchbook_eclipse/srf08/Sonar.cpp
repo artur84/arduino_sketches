@@ -37,9 +37,9 @@ void Sonar::sendCommand(int commandRegister, int address, int command) {
  * before calling readResult()
  */
 // Sets Units for display / storage
-void Sonar::setUnit(int commandRegister) {
+void Sonar::setUnit(int commandRegister, int address) {
 	//Serial.println("Ask a reading in centimeters");
-	Sonar::sendCommand(commandRegister, address_, 0x51);
+	Sonar::sendCommand(commandRegister, address, 0x51);
 	//pause (the sonar datasheet recquires 65 ms)
 	delay(70);
 }
@@ -54,9 +54,9 @@ void Sonar::setUnit(int commandRegister) {
 //}
 
 // Set to read off the register with stored result
-void Sonar::setRegister(int thisRegister) {
+void Sonar::setRegister(int address, int thisRegister) {
 	// start I2C transmission:
-	Wire.beginTransmission(address_);
+	Wire.beginTransmission(address);
 	// send address to read from:
 	Wire.write(thisRegister);
 	// end I2C transmission:
@@ -68,10 +68,10 @@ void Sonar::setRegister(int thisRegister) {
  * calling this.
  */
 // Read data from register return result
-int Sonar::readData(int numBytes) {
+int Sonar::readData(int address, int numBytes) {
 	int result = 0;        // the result is two bytes long
 	// send I2C request for data:
-	Wire.requestFrom(address_, numBytes);
+	Wire.requestFrom(address, numBytes);
 	// wait for two bytes to return:
 	while (Wire.available() < 2) {
 		// wait for result
@@ -91,12 +91,11 @@ int Sonar::readData(int numBytes) {
 // NEW_ADDRESS can be set to any of
 // E0, E2, E4, E6, E8, EA, EC, EE
 // F0, F2, F4, F6, F8, FA, FC, FE
-void Sonar::changeAddress(int NEW_ADDRESS) {
-	sendCommand(SONAR_COMMAND_REG, SONAR_BCAST_ADD, 0xA0);
-	sendCommand(SONAR_COMMAND_REG, SONAR_BCAST_ADD, 0xAA);
-	sendCommand(SONAR_COMMAND_REG, SONAR_BCAST_ADD, 0xA5);
-	sendCommand(SONAR_COMMAND_REG, SONAR_BCAST_ADD, NEW_ADDRESS);
-	address_ += 4; //Somehow this is necessary don't delete this
+void Sonar::changeAddress(int commandRegister, int NEW_ADDRESS) {
+	sendCommand(commandRegister, commandRegister, 0xA0);
+	sendCommand(commandRegister, commandRegister, 0xAA);
+	sendCommand(commandRegister, commandRegister, 0xA5);
+	sendCommand(commandRegister, commandRegister, NEW_ADDRESS);
 }
 
 /*
