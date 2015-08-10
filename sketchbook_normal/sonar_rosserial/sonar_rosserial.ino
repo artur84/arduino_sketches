@@ -6,7 +6,7 @@
  * The code has been adapted to be used with newer Arduino Versions.
  * Mantainer: arturoescobedo.iq@gmail.com
  */
-
+//#define USE_USBCON //Only necessary for arduino leonardo
 #include <Arduino.h>
 #include <Wire.h>
 #include <ros.h>
