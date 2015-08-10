@@ -9,6 +9,7 @@
 //add your includes for the project srf08 here
 #include "Arduino.h"
 #include <Wire.h>
+#include "Sonar.h"
 
 //end of add your includes here
 #ifdef __cplusplus
