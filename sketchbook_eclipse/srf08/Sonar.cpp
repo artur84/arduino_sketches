@@ -22,7 +22,7 @@ void Sonar::connect() {
 }
 
 // Communicates with Sonar to send commands
-void Sonar::sendCommand(int commandRegister, int address, int command) {
+void Sonar::sendCommand(int address, int commandRegister, int command) {
 	// start I2C transmission:
 	Wire.beginTransmission(address);
 	// send command:
@@ -39,7 +39,7 @@ void Sonar::sendCommand(int commandRegister, int address, int command) {
 // Sets Units for display / storage
 void Sonar::setUnit(int commandRegister, int address) {
 	//Serial.println("Ask a reading in centimeters");
-	Sonar::sendCommand(commandRegister, address, 0x51);
+	Sonar::sendCommand(address, commandRegister, 0x51);
 	//pause (the sonar datasheet recquires 65 ms)
 	delay(70);
 }
@@ -91,11 +91,11 @@ int Sonar::readData(int address, int numBytes) {
 // NEW_ADDRESS can be set to any of
 // E0, E2, E4, E6, E8, EA, EC, EE
 // F0, F2, F4, F6, F8, FA, FC, FE
-void Sonar::changeAddress(int commandRegister, int NEW_ADDRESS) {
-	sendCommand(commandRegister, commandRegister, 0xA0);
-	sendCommand(commandRegister, commandRegister, 0xAA);
-	sendCommand(commandRegister, commandRegister, 0xA5);
-	sendCommand(commandRegister, commandRegister, NEW_ADDRESS);
+void Sonar::changeAddress(int NEW_ADDRESS) {
+	sendCommand(SONAR_BCAST_ADD, SONAR_COMMAND_REG, 0xA0);
+	sendCommand(SONAR_BCAST_ADD, SONAR_COMMAND_REG, 0xAA);
+	sendCommand(SONAR_BCAST_ADD, SONAR_COMMAND_REG, 0xA5);
+	sendCommand(SONAR_BCAST_ADD, SONAR_COMMAND_REG, NEW_ADDRESS);
 }
 
 /*

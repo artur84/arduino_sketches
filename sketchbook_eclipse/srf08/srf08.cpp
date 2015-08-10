@@ -23,7 +23,7 @@ void setup() {
 	Serial.println("SONAR 08");
 	Serial.println("Previous Address:");
 	Serial.println(New_Address);
-	sonar.changeAddress(CommandRegister, New_Address);	//Don't delete this!!
+	sonar.changeAddress(New_Address);	//Don't delete this!!
 	New_Address += 4;	//Somehow it is necessary
 	//Initialize serial and wait for port to open:
 	Serial.println("Address:");

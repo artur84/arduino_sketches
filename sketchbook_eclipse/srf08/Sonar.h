@@ -40,7 +40,7 @@ public:
 	Sonar();
 	virtual ~Sonar();
 	void connect();
-	void sendCommand(int commandRegister, int address, int command);
+	void sendCommand(int address, int commandRegister, int command);
 	// Sets Units for display / storage
 	void setUnit(int commandRegister, int address);
 	// Sets maximum range of measurements
@@ -53,7 +53,7 @@ public:
 	// NEW_ADDRESS can be set to any of
 	// E0, E2, E4, E6, E8, EA, EC, EE
 	// F0, F2, F4, F6, F8, FA, FC, FE
-	void changeAddress(int commandRegister, int NEW_ADDRESS);
+	void changeAddress(int NEW_ADDRESS);
 	bool isReady(void);
 }
 ;
