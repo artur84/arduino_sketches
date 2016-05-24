@@ -1,9 +1,6 @@
-//#define USE_USBCON //Comment this line if you are using Arduino UNO, or leonardo with bluetooth.
+//#define USE_USBCON //Use this line only for Arduino Leonardo with USB Cable
 #include <ros.h>
 #include <std_msgs/String.h>
-
-
-
 ros::NodeHandle nh;
 std_msgs::String global_rosstr;
 std_msgs::String iheard_rosstr;
