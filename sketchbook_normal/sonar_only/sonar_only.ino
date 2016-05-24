@@ -89,11 +89,14 @@ void setRegister(int address, int thisRegister){
 int readData(int address, int numBytes){
   int result = 0;        // the result is two bytes long
   // send I2C request for data:
+  Serial.println("in read data"); 
   Wire.requestFrom(address, numBytes);
   // wait for two bytes to return:
   while (Wire.available() < 2 )   {
+   // Serial.println("in read data 2"); 
     // wait for result
   }
+  Serial.println("in read data"); 
   // read the two bytes, and combine them into one int:
   delay(50);
   result = Wire.read() * 256;
@@ -125,7 +128,7 @@ void setup()
     ; // wait for serial port to connect. Needed for Leonardo only
   }
   connect();
-  delay(100);//waits to make sure everything is ok befor
+  delay(5000);//waits to make sure everything is ok befor
   // prints title with ending line break 
   Serial.println("SONAR 08"); 
   Serial.println("Address:"); 
@@ -138,6 +141,22 @@ void setup()
 
 }
 
+
+/***********************************
+* Gets software revision of SRF Sonar
+/************************************/
+int getSoft(){
+  Wire.beginTransmission(address);
+  int software=0;
+  Wire.write(CommandRegister);
+  Wire.endTransmission();
+  Wire.requestFrom(address,1);
+  while (Wire.available()<0);
+       software=Wire.read();
+  return (software);
+  
+}
+
 /***********************************
 * Arduino Main Loop
 ***********************************/
@@ -145,21 +164,24 @@ long publisher_timer;
 
 void loop()
 {
-   // step 1: request reading from sensor
-   setUnit(CommandRegister, address);
+  if (millis() > publisher_timer) {
 
-   //pause
-  delay(70);
-
-  // set register for reading
-  setRegister(address, ResultRegister);
-
-  // read data from result register
-  sensorReading = readData(address, 2);
-
-  
-
-  publisher_timer = millis() + 4000; //publish once a second
+       Serial.println("unit"); 
+       setUnit(CommandRegister, address);
+    
+       //pause
+      delay(70);
+      Serial.println("delay"); 
+      // set register for reading
+      setRegister(address, ResultRegister);
+      Serial.println("reading"); 
+      Serial.println("range:");
+      // read data from result register
+      sensorReading = readData(address, 2);
+      Serial.println("range:"); 
+      Serial.println(sensorReading); 
+      publisher_timer = millis() + 4000; //publish once a second
+  }
 
  
 }
