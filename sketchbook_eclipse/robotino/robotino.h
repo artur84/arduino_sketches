@@ -11,7 +11,9 @@
 #include <ros.h>
 #include <geometry_msgs/Twist.h>
 #include <std_msgs/String.h>
-//#include <std_msgs/Int16.h>
+#include <std_msgs/Int16.h>
+
+#include "../srf08/Sonar.h"
 //add your includes for the project ros_dc_motor here
 
 /*******************************
