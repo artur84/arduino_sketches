@@ -21,6 +21,8 @@
 								<option id="it.baeyens.arduino.compiler.cpp.sketch.option.incpath.1581599967" name="Include Paths (-I)" superClass="it.baeyens.arduino.compiler.cpp.sketch.option.incpath" valueType="includePath">
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/encoders/core/core}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/encoders/core/variant}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/encoders/libraries/Encoder}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/encoders/libraries/Encoder/utility}&quot;"/>
 								</option>
 								<inputType id="it.baeyens.arduino.compiler.cpp.sketch.input.519453767" name="CPP source files" superClass="it.baeyens.arduino.compiler.cpp.sketch.input"/>
 							</tool>
@@ -28,6 +30,8 @@
 								<option id="it.baeyens.arduino.compiler.c.sketch.option.incpath.1060298866" name="Include Paths (-I)" superClass="it.baeyens.arduino.compiler.c.sketch.option.incpath" valueType="includePath">
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/encoders/core/core}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/encoders/core/variant}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/encoders/libraries/Encoder}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/encoders/libraries/Encoder/utility}&quot;"/>
 								</option>
 								<inputType id="it.baeyens.arduino.compiler.c.sketch.input.832047466" name="C Source Files" superClass="it.baeyens.arduino.compiler.c.sketch.input"/>
 							</tool>

@@ -1,12 +1,23 @@
-#include "Arduino.h"
-//The setup function is called once at startup of the sketch
-void setup()
-{
-// Add your initialization code here
+/* Program to read one  encoder connected to pin 2 and 3 of arduino UNO.
+ */
+#include <Encoder.h>
+
+//The encoder best performance is achieved when using interrupts
+//Pin 2 and 3 have interruptions in arduino UNO
+Encoder myEnc(2, 3);
+//   avoid using pins with LEDs attached
+
+void setup() {
+  Serial.begin(9600);
+  Serial.println("Basic Encoder Test:");
 }
 
-// The loop function is called in an endless loop
-void loop()
-{
-//Add your repeated code here
+long oldPosition  = -999;
+
+void loop() {
+  long newPosition = myEnc.read();
+  if (newPosition != oldPosition) {
+    oldPosition = newPosition;
+    Serial.println(newPosition);
+  }
 }

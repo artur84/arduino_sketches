@@ -41,5 +41,10 @@
 			<type>2</type>
 			<location>/home/arturo/ActiveSoftware/eclipse_mars/arduinoPlugin/packages/arduino/hardware/avr/1.6.11/variants/standard</location>
 		</link>
+		<link>
+			<name>libraries/Encoder</name>
+			<type>2</type>
+			<location>/home/arturo/arduino_sketches/libraries/Encoder</location>
+		</link>
 	</linkedResources>
 </projectDescription>
