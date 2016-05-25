@@ -3,8 +3,9 @@
 #include <Encoder.h>
 
 //The encoder best performance is achieved when using interrupts
-//Pin 2 and 3 have interruptions in arduino UNO
-Encoder myEnc(2, 3);
+//Pin 18,19,20 and 21 have interruptions in arduino MEGA
+
+Encoder myEnc(18,19);
 //   avoid using pins with LEDs attached
 
 void setup() {
