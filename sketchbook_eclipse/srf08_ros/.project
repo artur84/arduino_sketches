@@ -34,17 +34,22 @@
 		<link>
 			<name>Libraries/ros_lib</name>
 			<type>2</type>
-			<locationURI>ArduinoPivateLibPath/ros_lib</locationURI>
+			<locationURI>ArduinoPrivateLibPath/ros_lib</locationURI>
 		</link>
 		<link>
 			<name>arduino/core</name>
 			<type>2</type>
-			<locationURI>ArduinoPlatformPath/cores/arduino</locationURI>
+			<locationURI>ArduinoPlatformPath</locationURI>
 		</link>
 		<link>
-			<name>arduino/variant</name>
+			<name>core/core</name>
 			<type>2</type>
-			<locationURI>ArduinoPinPath/standard</locationURI>
+			<location>/home/arturo/arduino-1.6.0/hardware/arduino/avr/cores</location>
+		</link>
+		<link>
+			<name>libraries/Servo</name>
+			<type>2</type>
+			<location>/home/arturo/ActiveSoftware/eclipse_mars/arduinoPlugin/libraries/Servo/1.1.1</location>
 		</link>
 	</linkedResources>
 	<variableList>
@@ -54,7 +59,7 @@
 		</variable>
 		<variable>
 			<name>ArduinoPinPath</name>
-			<value>file:/home/arturo/arduino-1.6.0/hardware/arduino/avr/variants</value>
+			<value>file:/home/arturo/arduino-1.6.0/hardware/arduino/avr</value>
 		</variable>
 		<variable>
 			<name>ArduinoPlatformPath</name>

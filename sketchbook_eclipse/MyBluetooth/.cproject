@@ -1,49 +1,52 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <?fileVersion 4.0.0?><cproject storage_type_id="org.eclipse.cdt.core.XmlProjectDescriptionStorage">
 	<storageModule moduleId="org.eclipse.cdt.core.settings">
-		<cconfiguration id="it.baeyens.arduino.core.toolChain.release.1032011581">
-			<storageModule buildSystemId="org.eclipse.cdt.managedbuilder.core.configurationDataProvider" id="it.baeyens.arduino.core.toolChain.release.1032011581" moduleId="org.eclipse.cdt.core.settings" name="Release">
+		<cconfiguration id="it.baeyens.arduino.core.toolChain.release.977607399">
+			<storageModule buildSystemId="org.eclipse.cdt.managedbuilder.core.configurationDataProvider" id="it.baeyens.arduino.core.toolChain.release.977607399" moduleId="org.eclipse.cdt.core.settings" name="Release">
 				<externalSettings/>
 				<extensions>
+					<extension id="org.eclipse.cdt.core.ELF" point="org.eclipse.cdt.core.BinaryParser"/>
 					<extension id="org.eclipse.cdt.core.MakeErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
 					<extension id="org.eclipse.cdt.core.GCCErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
 					<extension id="org.eclipse.cdt.core.GLDErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
-					<extension id="org.eclipse.cdt.core.ELF" point="org.eclipse.cdt.core.BinaryParser"/>
 				</extensions>
 			</storageModule>
 			<storageModule moduleId="cdtBuildSystem" version="4.0.0">
-				<configuration artifactName="${ProjName}" buildProperties="" description="" id="it.baeyens.arduino.core.toolChain.release.1032011581" name="Release" parent="org.eclipse.cdt.build.core.emptycfg">
-					<folderInfo id="it.baeyens.arduino.core.toolChain.release.1032011581.63298001" name="/" resourcePath="">
-						<toolChain id="it.baeyens.arduino.core.toolChain.release.1383412093" name="Arduino Toolchain" superClass="it.baeyens.arduino.core.toolChain.release">
-							<targetPlatform archList="all" binaryParser="org.eclipse.cdt.core.ELF" id="it.baeyens.arduino.targetplatform.1383138940" name="Arduino Target" osList="all" superClass="it.baeyens.arduino.targetplatform"/>
-							<builder buildPath="${workspace_loc:/MyBluetooth}/Release" id="it.baeyens.arduino.sketch.builder.1760021036" keepEnvironmentInBuildfile="false" managedBuildOn="true" name="Arduino sketch builder" superClass="it.baeyens.arduino.sketch.builder"/>
-							<tool id="it.baeyens.arduino.tool.sketch.compiler.cpp.2073877634" name="Arduino C++ Compiler" superClass="it.baeyens.arduino.tool.sketch.compiler.cpp">
-								<option id="it.baeyens.arduino.compiler.cpp.sketch.option.incpath.1094406106" name="Include Paths (-I)" superClass="it.baeyens.arduino.compiler.cpp.sketch.option.incpath" valueType="includePath">
+				<configuration artifactName="${ProjName}" buildProperties="" description="" id="it.baeyens.arduino.core.toolChain.release.977607399" name="Release" parent="org.eclipse.cdt.build.core.emptycfg">
+					<folderInfo id="it.baeyens.arduino.core.toolChain.release.977607399.1528986129" name="/" resourcePath="">
+						<toolChain id="it.baeyens.arduino.core.toolChain.release.371610210" name="Arduino Toolchain" superClass="it.baeyens.arduino.core.toolChain.release">
+							<targetPlatform archList="all" binaryParser="org.eclipse.cdt.core.ELF" id="it.baeyens.arduino.targetplatform.1517392912" name="Arduino Target" osList="all" superClass="it.baeyens.arduino.targetplatform"/>
+							<builder buildPath="${workspace_loc:/MyBluetooth}/Release" id="it.baeyens.arduino.sketch.builder.1463057890" keepEnvironmentInBuildfile="false" managedBuildOn="true" name="Arduino sketch builder" superClass="it.baeyens.arduino.sketch.builder"/>
+							<tool id="it.baeyens.arduino.tool.sketch.compiler.cpp.945387097" name="Arduino C++ Compiler" superClass="it.baeyens.arduino.tool.sketch.compiler.cpp">
+								<option id="it.baeyens.arduino.compiler.cpp.sketch.option.incpath.213029014" name="Include Paths (-I)" superClass="it.baeyens.arduino.compiler.cpp.sketch.option.incpath" valueType="includePath">
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/MyBluetooth/arduino/core}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/MyBluetooth/arduino/variant}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/MyBluetooth/Libraries/ros_lib_old}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/MyBluetooth/Libraries/ros_lib}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/MyBluetooth/core/core}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/MyBluetooth/core/variant}&quot;"/>
 								</option>
-								<inputType id="it.baeyens.arduino.compiler.cpp.sketch.input.1778256410" name="CPP source files" superClass="it.baeyens.arduino.compiler.cpp.sketch.input"/>
+								<inputType id="it.baeyens.arduino.compiler.cpp.sketch.input.1822117363" name="CPP source files" superClass="it.baeyens.arduino.compiler.cpp.sketch.input"/>
 							</tool>
-							<tool id="it.baeyens.arduino.tool.compiler.c.297185183" name="Arduino C Compiler" superClass="it.baeyens.arduino.tool.compiler.c">
-								<option id="it.baeyens.arduino.compiler.c.sketch.option.incpath.455374592" name="Include Paths (-I)" superClass="it.baeyens.arduino.compiler.c.sketch.option.incpath" valueType="includePath">
+							<tool id="it.baeyens.arduino.tool.compiler.c.1335749595" name="Arduino C Compiler" superClass="it.baeyens.arduino.tool.compiler.c">
+								<option id="it.baeyens.arduino.compiler.c.sketch.option.incpath.1951272200" name="Include Paths (-I)" superClass="it.baeyens.arduino.compiler.c.sketch.option.incpath" valueType="includePath">
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/MyBluetooth/arduino/core}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/MyBluetooth/arduino/variant}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/MyBluetooth/Libraries/ros_lib_old}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/MyBluetooth/Libraries/ros_lib}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/MyBluetooth/core/core}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/MyBluetooth/core/variant}&quot;"/>
 								</option>
-								<inputType id="it.baeyens.arduino.compiler.c.sketch.input.1720525221" name="C Source Files" superClass="it.baeyens.arduino.compiler.c.sketch.input"/>
+								<inputType id="it.baeyens.arduino.compiler.c.sketch.input.290709170" name="C Source Files" superClass="it.baeyens.arduino.compiler.c.sketch.input"/>
 							</tool>
-							<tool id="it.baeyens.arduino.tool.ar.1736745619" name="Arduino archiver" superClass="it.baeyens.arduino.tool.ar"/>
-							<tool id="it.baeyens.arduino.tool.combine.1913081857" name="Arduino combiner" superClass="it.baeyens.arduino.tool.combine"/>
-							<tool id="it.baeyens.arduino.tool.objcopy.eep.1259373656" name="Arduino tool Create eeprom" superClass="it.baeyens.arduino.tool.objcopy.eep"/>
-							<tool id="it.baeyens.arduino.tool.objcopy.flash.1456830569" name="Arduino tool Create hex" superClass="it.baeyens.arduino.tool.objcopy.flash"/>
-							<tool id="it.baeyens.arduino.tool.size.190640262" name="Arduino tool Print Size" superClass="it.baeyens.arduino.tool.size"/>
+							<tool id="it.baeyens.arduino.tool.sketch.compiler.s.982427738" name="Arduino Assembler" superClass="it.baeyens.arduino.tool.sketch.compiler.s"/>
+							<tool id="it.baeyens.arduino.tool.ar.432245603" name="Arduino archiver" superClass="it.baeyens.arduino.tool.ar"/>
+							<tool id="it.baeyens.arduino.tool.combine.1209713461" name="Arduino combiner" superClass="it.baeyens.arduino.tool.combine"/>
+							<tool id="it.baeyens.arduino.tool.objcopy.eep.1566400808" name="Arduino tool Create eeprom" superClass="it.baeyens.arduino.tool.objcopy.eep"/>
+							<tool id="it.baeyens.arduino.tool.objcopy.flash.1226000591" name="Arduino tool Create hex" superClass="it.baeyens.arduino.tool.objcopy.flash"/>
+							<tool id="it.baeyens.arduino.tool.size.1787486203" name="Arduino tool Print Size" superClass="it.baeyens.arduino.tool.size"/>
 						</toolChain>
 					</folderInfo>
 					<sourceEntries>
-						<entry excluding="Libraries/*/?xamples" flags="VALUE_WORKSPACE_PATH" kind="sourcePath" name=""/>
+						<entry excluding="Libraries/*/?xamples|Libraries/*/?xtras" flags="VALUE_WORKSPACE_PATH" kind="sourcePath" name=""/>
 					</sourceEntries>
 				</configuration>
 			</storageModule>
@@ -51,7 +54,7 @@
 		</cconfiguration>
 	</storageModule>
 	<storageModule moduleId="cdtBuildSystem" version="4.0.0">
-		<project id="MyBluetooth.null.1653917370" name="MyBluetooth"/>
+		<project id="MyBluetooth.null.1234009679" name="MyBluetooth"/>
 	</storageModule>
 	<storageModule moduleId="scannerConfiguration">
 		<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId=""/>

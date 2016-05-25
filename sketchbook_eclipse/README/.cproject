@@ -18,14 +18,14 @@
 							<targetPlatform archList="all" binaryParser="org.eclipse.cdt.core.ELF" id="it.baeyens.arduino.targetplatform.852560366" name="Arduino Target" osList="all" superClass="it.baeyens.arduino.targetplatform"/>
 							<builder buildPath="${workspace_loc:/README}/Release" id="it.baeyens.arduino.sketch.builder.234499923" keepEnvironmentInBuildfile="false" managedBuildOn="true" name="Arduino sketch builder" superClass="it.baeyens.arduino.sketch.builder"/>
 							<tool id="it.baeyens.arduino.tool.sketch.compiler.cpp.1541480332" name="Arduino C++ Compiler" superClass="it.baeyens.arduino.tool.sketch.compiler.cpp">
-								<option id="it.baeyens.arduino.compiler.cpp.sketch.option.incpath.402015819" superClass="it.baeyens.arduino.compiler.cpp.sketch.option.incpath" valueType="includePath">
+								<option id="it.baeyens.arduino.compiler.cpp.sketch.option.incpath.402015819" name="Include Paths (-I)" superClass="it.baeyens.arduino.compiler.cpp.sketch.option.incpath" valueType="includePath">
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/README/arduino/core}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/README/arduino/variant}&quot;"/>
 								</option>
 								<inputType id="it.baeyens.arduino.compiler.cpp.sketch.input.502598289" name="CPP source files" superClass="it.baeyens.arduino.compiler.cpp.sketch.input"/>
 							</tool>
 							<tool id="it.baeyens.arduino.tool.compiler.c.473284882" name="Arduino C Compiler" superClass="it.baeyens.arduino.tool.compiler.c">
-								<option id="it.baeyens.arduino.compiler.c.sketch.option.incpath.671873237" superClass="it.baeyens.arduino.compiler.c.sketch.option.incpath" valueType="includePath">
+								<option id="it.baeyens.arduino.compiler.c.sketch.option.incpath.671873237" name="Include Paths (-I)" superClass="it.baeyens.arduino.compiler.c.sketch.option.incpath" valueType="includePath">
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/README/arduino/core}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/README/arduino/variant}&quot;"/>
 								</option>
@@ -36,6 +36,7 @@
 							<tool id="it.baeyens.arduino.tool.objcopy.eep.12665310" name="Arduino tool Create eeprom" superClass="it.baeyens.arduino.tool.objcopy.eep"/>
 							<tool id="it.baeyens.arduino.tool.objcopy.flash.1818394555" name="Arduino tool Create hex" superClass="it.baeyens.arduino.tool.objcopy.flash"/>
 							<tool id="it.baeyens.arduino.tool.size.960863730" name="Arduino tool Print Size" superClass="it.baeyens.arduino.tool.size"/>
+							<tool id="it.baeyens.arduino.tool.sketch.compiler.s.1781901358" name="Arduino Assembler" superClass="it.baeyens.arduino.tool.sketch.compiler.s"/>
 						</toolChain>
 					</folderInfo>
 					<sourceEntries>

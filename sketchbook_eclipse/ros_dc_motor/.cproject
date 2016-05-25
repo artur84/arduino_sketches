@@ -5,10 +5,10 @@
 			<storageModule buildSystemId="org.eclipse.cdt.managedbuilder.core.configurationDataProvider" id="it.baeyens.arduino.core.toolChain.release.564013660" moduleId="org.eclipse.cdt.core.settings" name="Release">
 				<externalSettings/>
 				<extensions>
+					<extension id="org.eclipse.cdt.core.ELF" point="org.eclipse.cdt.core.BinaryParser"/>
 					<extension id="org.eclipse.cdt.core.MakeErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
 					<extension id="org.eclipse.cdt.core.GCCErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
 					<extension id="org.eclipse.cdt.core.GLDErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
-					<extension id="org.eclipse.cdt.core.ELF" point="org.eclipse.cdt.core.BinaryParser"/>
 				</extensions>
 			</storageModule>
 			<storageModule moduleId="cdtBuildSystem" version="4.0.0">
@@ -22,6 +22,10 @@
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/ros_dc_motor/arduino/core}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/ros_dc_motor/arduino/variant}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/ros_dc_motor/Libraries/ros_lib}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/ros_dc_motor/Libraries/AFMotor}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/ros_dc_motor/libraries/Servo}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/ros_dc_motor/libraries/Servo/src}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/ros_dc_motor/core/core}&quot;"/>
 								</option>
 								<inputType id="it.baeyens.arduino.compiler.cpp.sketch.input.1244081943" name="CPP source files" superClass="it.baeyens.arduino.compiler.cpp.sketch.input"/>
 							</tool>
@@ -30,6 +34,10 @@
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/ros_dc_motor/arduino/core}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/ros_dc_motor/arduino/variant}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/ros_dc_motor/Libraries/ros_lib}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/ros_dc_motor/Libraries/AFMotor}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/ros_dc_motor/libraries/Servo}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/ros_dc_motor/libraries/Servo/src}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/ros_dc_motor/core/core}&quot;"/>
 								</option>
 								<inputType id="it.baeyens.arduino.compiler.c.sketch.input.496226667" name="C Source Files" superClass="it.baeyens.arduino.compiler.c.sketch.input"/>
 							</tool>
@@ -38,6 +46,7 @@
 							<tool id="it.baeyens.arduino.tool.objcopy.eep.306589858" name="Arduino tool Create eeprom" superClass="it.baeyens.arduino.tool.objcopy.eep"/>
 							<tool id="it.baeyens.arduino.tool.objcopy.flash.1325649653" name="Arduino tool Create hex" superClass="it.baeyens.arduino.tool.objcopy.flash"/>
 							<tool id="it.baeyens.arduino.tool.size.1611573174" name="Arduino tool Print Size" superClass="it.baeyens.arduino.tool.size"/>
+							<tool id="it.baeyens.arduino.tool.sketch.compiler.s.623980724" name="Arduino Assembler" superClass="it.baeyens.arduino.tool.sketch.compiler.s"/>
 						</toolChain>
 					</folderInfo>
 					<sourceEntries>

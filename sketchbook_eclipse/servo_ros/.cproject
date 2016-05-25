@@ -42,6 +42,7 @@
 							<tool id="it.baeyens.arduino.tool.objcopy.eep.419048502" name="Arduino tool Create eeprom" superClass="it.baeyens.arduino.tool.objcopy.eep"/>
 							<tool id="it.baeyens.arduino.tool.objcopy.flash.941277839" name="Arduino tool Create hex" superClass="it.baeyens.arduino.tool.objcopy.flash"/>
 							<tool id="it.baeyens.arduino.tool.size.1205520726" name="Arduino tool Print Size" superClass="it.baeyens.arduino.tool.size"/>
+							<tool id="it.baeyens.arduino.tool.sketch.compiler.s.1485557527" name="Arduino Assembler" superClass="it.baeyens.arduino.tool.sketch.compiler.s"/>
 						</toolChain>
 					</folderInfo>
 					<sourceEntries>
