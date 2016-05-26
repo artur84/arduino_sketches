@@ -37,6 +37,9 @@
 #define MOTORI_PINB 6
 #define MOTORI_ENABLE 7
 
+//Odometry
+#define ODOM_PUBLISH_TIME 2 //TIME IN milliseconds
+#define CONTROLLER_TIME 10 //Time in milliseconds
 
 //otros
 #define BACKWARD -1  //moves backwards

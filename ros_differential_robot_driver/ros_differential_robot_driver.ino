@@ -6,7 +6,7 @@
  ********************************/
 ros::NodeHandle nh;
 std_msgs::String ok_rosstr;
-geometry_msgs::Vector3 wheel_velocity_vector; //Left and right wheels
+geometry_msgs::Vector3 wheel_pose; //Left and right wheels
 volatile float global_linx = 0, global_angz = 0;
 long oldPositionI  = -999;
 long oldPositionD = -999;
@@ -23,6 +23,7 @@ Encoder myEncI(ENCIA,ENCIB);
 //Creates the ROS publishers and subscribers
 ros::Subscriber<geometry_msgs::Twist> cmd_vel_sub("cmd_vel", cmd_vel_cb);
 ros::Publisher str_pub("string", &ok_rosstr);
+ros::Publisher wheel_pose_pub("wheel_pose", &wheel_pose);
 
 
 void move_robot(float linearx, float angularz) {
@@ -44,7 +45,7 @@ void cmd_vel_cb(const geometry_msgs::Twist& cmd_msg) {
  ****      Arduino SETUP          ****
  *************************************/
 void setup() {
-	nh.getHardware()->setBaud(57600); //The HC06 and 05 use by default 9600 baud rate
+	//nh.getHardware()->setBaud(57600); //The HC06 and 05 use by default 9600 baud rate
 	nh.initNode();
 	nh.subscribe(cmd_vel_sub);
 	nh.advertise(str_pub);
@@ -66,26 +67,23 @@ void loop() {
 	  long newPositionD = myEncD.read();
 	  long newPositionI = myEncI.read();
 
-	  if (newPositionD != oldPositionD) {
-	    oldPositionD = newPositionD;
-	    Serial.print("\nDer: ");
-	    Serial.print(newPositionD);
-	  }
-
-	  if (newPositionI != oldPositionI) {
-	    oldPositionI = newPositionI;
-	    Serial.print(" Izq: ");
-	    Serial.println(newPositionI);
+	  if (!(millis() % ODOM_PUBLISH_TIME)) {	//Send wheel position every 2 ms
+		  wheel_pose.x= newPositionD;
+		  wheel_pose.y=newPositionI;
+		  wheel_pose.z=0;
+		  wheel_pose_pub.publish(&wheel_pose);
+		   nh.spinOnce();
 	  }
 	//I will just keep the loop waiting for a message
 	//in the ros topic
-	if (!(millis() % 10)) {	//Control the motors every 10ms aprox.
+	if (!(millis() % CONTROLLER_TIME)) {	//Control the motors every 10ms aprox.
 		move_robot(global_linx, global_angz);
 	}
-	if (!(millis() % 3000)) {	//Say I'm ok once in a while
-		str_pub.publish(&ok_rosstr);
-		nh.spinOnce();
-	}
+
+//	if (!(millis() % 3000)) {	//Say I'm ok once in a while
+//		str_pub.publish(&ok_rosstr);
+//		nh.spinOnce();
+//	}
 
 	if ((vl <= 255 && vl >= -255) && (vr <= 255 && vl >= -255)) {
 		left_motor.move(vl); // turn it on going backward
