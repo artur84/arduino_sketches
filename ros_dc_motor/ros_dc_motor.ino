@@ -11,11 +11,16 @@
  * Global variables
  */
 ros::NodeHandle nh;
-std_msgs::String ok_rosstr;
-std_msgs::String callback_rosstr;
-float global_linx = 0, global_angz = 0;
-//std_msgs::Int16 sonar_msg;
-//ros::Publisher sonar_pub("arduino/sonar", &sonar_msg);
+std_msgs::String callback_rosstr, ok_rosstr;
+geometry_msgs::Vector3 wheel_pose; //Left and right wheels
+volatile float global_linx = 0, global_angz = 0;
+long oldPositionI  = -999;
+long oldPositionD = -999;
+volatile float vl, vr;
+
+//   avoid using pins with LEDs attached
+Encoder myEncD(ENCDA,ENCDB);
+Encoder myEncI(ENCIA,ENCIB);
 
 /*
  * My functions
@@ -105,6 +110,7 @@ void move_robot(float linearx, float angularz) {
 //in this example pub is declared before the cmd_vel_cb
 //because it used there
 ros::Publisher str_pub("arduino/str_output", &ok_rosstr);
+ros::Publisher wheel_pose_pub("arduino/wheel_pose", &wheel_pose);
 
 //Twist callback
 void cmd_vel_cb(const geometry_msgs::Twist& cmd_msg) {
@@ -126,7 +132,7 @@ void setup() {
 	nh.initNode();
 	nh.subscribe(cmd_vel_sub);
 	nh.advertise(str_pub);
-	//nh.advertise(sonar_pub);
+	nh.advertise(wheel_pose_pub);
 	ok_rosstr.data = "arduino ok";
 	callback_rosstr.data = "cb executed";
 	pinMode(LED, OUTPUT);
@@ -143,6 +149,8 @@ void setup() {
  * Arduino MAIN LOOP
  */
 void loop() {
+	long newPositionD = myEncD.read();
+	long newPositionI = myEncI.read();
 	//I will just keep the loop waiting for a message
 	//in the ros topic
 	if (!(millis() % 10)) {	//Control the motors every 10ms aprox.
@@ -150,6 +158,13 @@ void loop() {
 	}
 	if (!(millis() % 3000)) {	//Say I'm ok once in a while
 		str_pub.publish(&ok_rosstr);
+		nh.spinOnce();
+	}
+	if (!(millis() % 10)) {	//Say I'm ok once in a while
+		wheel_pose.x= newPositionD;
+		wheel_pose.y=newPositionI;
+		wheel_pose.z=0;
+		wheel_pose_pub.publish(&wheel_pose);
 		nh.spinOnce();
 	}
 	nh.spinOnce();

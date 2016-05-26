@@ -10,12 +10,19 @@
 #include <ros.h>
 #include <geometry_msgs/Twist.h>
 #include <std_msgs/String.h>
-//#include <std_msgs/Int16.h>
-//add your includes for the project ros_dc_motor here
-
+#include <geometry_msgs/Vector3.h>
+#include <Encoder.h>
 /*******************************
  * Define the material
  ******************************/
+//Para los encoders
+#define ENCDA 20  //ENCODER DERECHO A (YELLOW)
+#define ENCDB 21    //ENCONDER DERECHO B (WHITE)
+
+#define ENCIA 19  //ENCODER IZQUIERDO A (YELLOW)
+#define ENCIB 18    //ENCONDER IZQUIERDO B (WHITE)
+
+
 #define RIGHT_MOT_POS 2
 #define RIGHT_MOT_NEG 3
 #define RIGHT_MOT_EN 4 //enable
