@@ -23,11 +23,11 @@
 #define ENCIB 18    //ENCONDER IZQUIERDO B (WHITE)
 
 
-#define RIGHT_MOT_POS 2
-#define RIGHT_MOT_NEG 3
+#define RIGHT_MOT_POS 3
+#define RIGHT_MOT_NEG 2
 #define RIGHT_MOT_EN 4 //enable
-#define LEFT_MOT_POS 5
-#define LEFT_MOT_NEG 6
+#define LEFT_MOT_POS 6
+#define LEFT_MOT_NEG 5
 #define LEFT_MOT_EN 7 //enable
 #define BACKWARD -1  //moves backwards
 #define FORWARD 1

@@ -153,20 +153,33 @@ void loop() {
 	long newPositionI = myEncI.read();
 	//I will just keep the loop waiting for a message
 	//in the ros topic
+	 if (newPositionD != oldPositionD) {
+	    oldPositionD = newPositionD;
+	    wheel_pose.x= newPositionD;
+	    wheel_pose.y=newPositionI;
+	    wheel_pose.z=0;
+	    wheel_pose_pub.publish(&wheel_pose);
+	    nh.spinOnce();
+	  }
+
+	  if (newPositionI != oldPositionI) {
+	    oldPositionI = newPositionI;
+	    wheel_pose.x= newPositionD;
+	    wheel_pose.y=newPositionI;
+	    wheel_pose.z=0;
+	    wheel_pose_pub.publish(&wheel_pose);
+	    nh.spinOnce();
+	  }
+
 	if (!(millis() % 10)) {	//Control the motors every 10ms aprox.
 		move_robot(global_linx, global_angz);
 	}
+
 	if (!(millis() % 3000)) {	//Say I'm ok once in a while
 		str_pub.publish(&ok_rosstr);
 		nh.spinOnce();
 	}
-	if (!(millis() % 10)) {	//Say I'm ok once in a while
-		wheel_pose.x= newPositionD;
-		wheel_pose.y=newPositionI;
-		wheel_pose.z=0;
-		wheel_pose_pub.publish(&wheel_pose);
-		nh.spinOnce();
-	}
+
 	nh.spinOnce();
 	delay(1);
 }
