@@ -39,7 +39,7 @@
 		<link>
 			<name>core/variant</name>
 			<type>2</type>
-			<location>/home/arturo/ActiveSoftware/eclipse_mars/arduinoPlugin/packages/arduino/hardware/avr/1.6.11/variants/standard</location>
+			<location>/home/arturo/ActiveSoftware/eclipse_mars/arduinoPlugin/packages/arduino/hardware/avr/1.6.11/variants/mega</location>
 		</link>
 		<link>
 			<name>libraries/ros_lib</name>
