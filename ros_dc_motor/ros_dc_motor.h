@@ -12,6 +12,7 @@
 #include <std_msgs/String.h>
 #include <geometry_msgs/Vector3.h>
 #include <Encoder.h>
+#include <PID_v1.h>
 /*******************************
  * Define the material
  ******************************/
@@ -34,8 +35,8 @@
 #define LEFT 1
 #define RIGHT 0
 #define LED 13 //A led that blinks when receiving a message in any topic
-#define WHEELRAD 0.015 //The radius of the wheel (m)
-#define WHEELDIST 0.11 //Distance between wheels (m)
+#define WHEELRAD 0.045 //The radius of the wheel (m)
+#define WHEELDIST 0.42 //Distance between wheels (m)
 //end of add your includes here
 #ifdef __cplusplus
 extern "C" {

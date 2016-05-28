@@ -24,6 +24,7 @@
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/ros_dc_motor/libraries/ros_lib}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/ros_dc_motor/libraries/Encoder}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/ros_dc_motor/libraries/Encoder/utility}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/ros_dc_motor/libraries/PID-Library}&quot;"/>
 								</option>
 								<inputType id="it.baeyens.arduino.compiler.cpp.sketch.input.55579186" name="CPP source files" superClass="it.baeyens.arduino.compiler.cpp.sketch.input"/>
 							</tool>
@@ -34,6 +35,7 @@
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/ros_dc_motor/libraries/ros_lib}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/ros_dc_motor/libraries/Encoder}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/ros_dc_motor/libraries/Encoder/utility}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/ros_dc_motor/libraries/PID-Library}&quot;"/>
 								</option>
 								<inputType id="it.baeyens.arduino.compiler.c.sketch.input.1850154125" name="C Source Files" superClass="it.baeyens.arduino.compiler.c.sketch.input"/>
 							</tool>

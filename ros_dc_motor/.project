@@ -47,6 +47,11 @@
 			<location>/home/arturo/arduino_sketches/libraries/Encoder</location>
 		</link>
 		<link>
+			<name>libraries/PID-Library</name>
+			<type>2</type>
+			<location>/home/arturo/arduino_sketches/libraries/PID-Library</location>
+		</link>
+		<link>
 			<name>libraries/ros_lib</name>
 			<type>2</type>
 			<location>/home/arturo/arduino_sketches/libraries/ros_lib</location>
