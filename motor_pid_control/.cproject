@@ -21,6 +21,7 @@
 								<option id="it.baeyens.arduino.compiler.cpp.sketch.option.incpath.625340735" name="Include Paths (-I)" superClass="it.baeyens.arduino.compiler.cpp.sketch.option.incpath" valueType="includePath">
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/motor_pid_control/core/core}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/motor_pid_control/core/variant}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/motor_pid_control/libraries/PID-Library}&quot;"/>
 								</option>
 								<inputType id="it.baeyens.arduino.compiler.cpp.sketch.input.1663194925" name="CPP source files" superClass="it.baeyens.arduino.compiler.cpp.sketch.input"/>
 							</tool>
@@ -28,6 +29,7 @@
 								<option id="it.baeyens.arduino.compiler.c.sketch.option.incpath.747663703" name="Include Paths (-I)" superClass="it.baeyens.arduino.compiler.c.sketch.option.incpath" valueType="includePath">
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/motor_pid_control/core/core}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/motor_pid_control/core/variant}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/motor_pid_control/libraries/PID-Library}&quot;"/>
 								</option>
 								<inputType id="it.baeyens.arduino.compiler.c.sketch.input.2077526129" name="C Source Files" superClass="it.baeyens.arduino.compiler.c.sketch.input"/>
 							</tool>
@@ -54,4 +56,5 @@
 		<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId=""/>
 	</storageModule>
 	<storageModule moduleId="org.eclipse.cdt.core.LanguageSettingsProviders"/>
+	<storageModule moduleId="refreshScope"/>
 </cproject>

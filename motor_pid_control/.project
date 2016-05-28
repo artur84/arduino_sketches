@@ -41,5 +41,10 @@
 			<type>2</type>
 			<location>/home/arturo/ActiveSoftware/eclipse_mars/arduinoPlugin/packages/arduino/hardware/avr/1.6.11/variants/mega</location>
 		</link>
+		<link>
+			<name>libraries/PID-Library</name>
+			<type>2</type>
+			<location>/home/arturo/arduino_sketches/libraries/PID-Library</location>
+		</link>
 	</linkedResources>
 </projectDescription>
