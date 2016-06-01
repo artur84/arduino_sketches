@@ -9,13 +9,16 @@
 #include <Arduino.h>
 #include "Timer.h"
 #define LED 13
-#define LEFT_MOT_POS 3
-#define LEFT_MOT_NEG 2
-#define LEFT_MOT_EN 4 //enable
+#define LEFT_MOT_POS 6
+#define LEFT_MOT_NEG 5
+#define LEFT_MOT_EN 7 //enable
+#define RIGHT_MOT_POS 3
+#define RIGHT_MOT_NEG 2
+#define RIGHT_MOT_EN 4 //enable
 
 Timer t; //creates the timer
 long T = 100; //Period of the wave [ms]
-float Ta = 50;
+float Ta = 4;
 
 void setup() {
 
@@ -25,6 +28,13 @@ void setup() {
 	pinMode(LED, OUTPUT);
 	pinMode(LEFT_MOT_POS, OUTPUT);
 	pinMode(LEFT_MOT_NEG, OUTPUT);
+	pinMode(RIGHT_MOT_POS, OUTPUT);
+	pinMode(RIGHT_MOT_NEG, OUTPUT);
+
+	digitalWrite(LEFT_MOT_POS, LOW);
+	digitalWrite(LEFT_MOT_NEG, HIGH);
+	digitalWrite(RIGHT_MOT_POS, LOW);
+	digitalWrite(RIGHT_MOT_NEG, HIGH);
 
 }
 
@@ -33,16 +43,13 @@ void loop() {
 }
 
 void putDown() {
-	digitalWrite(LEFT_MOT_POS, HIGH);
-	digitalWrite(LEFT_MOT_NEG, HIGH);
 	digitalWrite(LEFT_MOT_EN, LOW);
+	digitalWrite(RIGHT_MOT_EN, LOW);
 	digitalWrite(LED, LOW);
 }
 
 void putHigh() {
-
-	digitalWrite(LEFT_MOT_POS, LOW);
-	digitalWrite(LEFT_MOT_NEG, HIGH);
 	digitalWrite(LEFT_MOT_EN, HIGH);
+	digitalWrite(RIGHT_MOT_EN, HIGH);
 	digitalWrite(LED, HIGH);
 }
