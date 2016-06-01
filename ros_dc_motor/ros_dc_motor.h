@@ -37,6 +37,7 @@
 #define LED 13 //A led that blinks when receiving a message in any topic
 #define WHEELRAD 0.045 //The radius of the wheel (m)
 #define WHEELDIST 0.42 //Distance between wheels (m)
+#define CONTROL_RATE 10 //How often, in milliseconds, the PID will be evaluated. (int>0)
 //end of add your includes here
 #ifdef __cplusplus
 extern "C" {
