@@ -4,6 +4,9 @@
  * This program hears a Twist message in a ROS topic
  * and commands two motors according to the linear.x
  * value of the received Twist.
+ *
+ * We send the encoders information as a Vector3 message, where the first
+ * element is the left wheel data and the second element is the right wheel data.
  * mantainer: arturoescobedo.iq@gmail.com
  */
 
@@ -12,9 +15,9 @@
  */
 ros::NodeHandle nh;
 std_msgs::String callback_rosstr, ok_rosstr;
-geometry_msgs::Vector3 wheel_pose; //Left and right wheels
+std_msgs::Int32 lwheel_pose, rwheel_pose;
 volatile float global_linx = 0, global_angz = 0;
-long oldPositionI = -999;
+long oldPositionI = -999; //long is a 4 bytes type
 long oldPositionD = -999;
 volatile float vl, vr;
 
@@ -125,7 +128,8 @@ void move_robot(float linearx, float angularz) {
 //in this example pub is declared before the cmd_vel_cb
 //because it used there
 ros::Publisher str_pub("arduino/str_output", &ok_rosstr);
-ros::Publisher wheel_pose_pub("arduino/wheel_pose", &wheel_pose);
+ros::Publisher lwheel_pose_pub("arduino/lwheel", &lwheel_pose);
+ros::Publisher rwheel_pose_pub("arduino/rwheel", &rwheel_pose);
 
 //Twist callback
 void cmd_vel_cb(const geometry_msgs::Twist& cmd_msg) {
@@ -145,9 +149,13 @@ ros::Subscriber<geometry_msgs::Twist> cmd_vel_sub("arduino/cmd_vel",
 void setup() {
 	nh.getHardware()->setBaud(57600); //The HC06 and 05 use by default 9600 baud rate
 	nh.initNode();
+	//Subscribed ROS topics
 	nh.subscribe(cmd_vel_sub);
+
+	//Advertise ROS topics
 	nh.advertise(str_pub);
-	nh.advertise(wheel_pose_pub);
+	nh.advertise(lwheel_pose_pub);
+	nh.advertise(rwheel_pose_pub);
 	ok_rosstr.data = "arduino ok";
 	callback_rosstr.data = "cb executed";
 	pinMode(LED, OUTPUT);
@@ -177,19 +185,19 @@ void loop() {
 	//in the ros topic
 	if (newPositionD != oldPositionD) {
 		oldPositionD = newPositionD;
-		wheel_pose.x = newPositionD;
-		wheel_pose.y = newPositionI;
-		wheel_pose.z = 0;
-		wheel_pose_pub.publish(&wheel_pose);
+		lwheel_pose.data = newPositionI;
+		rwheel_pose.data = newPositionD;
+		lwheel_pose_pub.publish(&lwheel_pose);
+		rwheel_pose_pub.publish(&rwheel_pose);
 		nh.spinOnce();
 	}
 
 	if (newPositionI != oldPositionI) {
 		oldPositionI = newPositionI;
-		wheel_pose.x = newPositionD;
-		wheel_pose.y = newPositionI;
-		wheel_pose.z = 0;
-		wheel_pose_pub.publish(&wheel_pose);
+		lwheel_pose.data = newPositionI;
+		rwheel_pose.data = newPositionD;
+		lwheel_pose_pub.publish(&lwheel_pose);
+		rwheel_pose_pub.publish(&rwheel_pose);
 		nh.spinOnce();
 	}
 
