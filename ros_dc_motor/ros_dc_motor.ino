@@ -16,6 +16,7 @@
 ros::NodeHandle nh;
 std_msgs::String callback_rosstr, ok_rosstr;
 std_msgs::Int32 lwheel_pose, rwheel_pose;
+std_msgs::Float32 lwheel_vel, rwheel_vel;
 volatile float linear_vel = 0, angular_vel = 0;
 long oldPositionI = -999; //long is a 4 bytes type
 long oldPositionD = -999;
@@ -30,7 +31,7 @@ double vr_measured, vr_controlled;
 double vl_measured, vl_controlled;
 
 //Define the aggressive and conservative Tuning Parameters
-double consKp = 35, consKi = 1.0, consKd = 0.5;
+double consKp = 10, consKi = 1.0, consKd = 0.5;
 
 //Specify the links and initial tuning parameters
 PID PID_R(&vr_measured, &vr_controlled, &vr_desired, consKp, consKi, consKd,
@@ -78,67 +79,76 @@ void soft_stop(int motor) {
 		analogWrite(RIGHT_MOT_EN, 0);
 	}
 }
-/* Moves the left wheel forward
- * motor: LEFT or RIGHT (0 or 1)
- * speed: a value between -255 and 255 (negative is backward, positive is forward)
+/* Moves the right wheel
  */
-void move_motor(int motor) {
-
-	//sonar_msg.data=pwm_val;
-	//sonar_pub.publish(&sonar_msg);
-	if (motor == LEFT) {
-		PID_L.Compute();
-		if (vl_controlled > 0 && vl_controlled <= 255) {
-			digitalWrite(LEFT_MOT_POS, 1);
-			digitalWrite(LEFT_MOT_NEG, 0);
-			analogWrite(LEFT_MOT_EN, vl_controlled);
-		} else if (vl_controlled <= 1 && vl_controlled >= -255) {
-			digitalWrite(LEFT_MOT_POS, 0);
-			digitalWrite(LEFT_MOT_NEG, 1);
-			analogWrite(LEFT_MOT_EN, -1 * vl_controlled);
-		} else {
-			//Stop if received an wrong direction
-			hard_stop (LEFT);
-		}
-
-	} else if (motor == RIGHT) {
-		PID_R.Compute();
-		if (vr_controlled >= 1 && vr_controlled <= 255) {
-			digitalWrite(RIGHT_MOT_POS, 1);
-			digitalWrite(RIGHT_MOT_NEG, 0);
-			analogWrite(RIGHT_MOT_EN, vr_controlled);
-		} else if (vr_controlled <= 1 && vr_controlled >= -255) {
-			digitalWrite(RIGHT_MOT_POS, 0);
-			digitalWrite(RIGHT_MOT_NEG, 1);
-			analogWrite(RIGHT_MOT_EN, -1 * vr_controlled);
-		} else {
-			//Stop if received an wrong direction
-			hard_stop (RIGHT);
-		}
+void move_right_motor(void) {
+	PID_R.Compute();
+	if (vr_controlled >= 1 && vr_controlled <= 255) {
+		digitalWrite(RIGHT_MOT_POS, 1);
+		digitalWrite(RIGHT_MOT_NEG, 0);
+		analogWrite(RIGHT_MOT_EN, vr_controlled);
+	} else if (vr_controlled <= 1 && vr_controlled >= -255) {
+		digitalWrite(RIGHT_MOT_POS, 0);
+		digitalWrite(RIGHT_MOT_NEG, 1);
+		analogWrite(RIGHT_MOT_EN, -1 * vr_controlled);
+	} else {
+		//Stop if received an wrong direction
+		hard_stop (RIGHT);
 	}
 }
 
-void move_robot(float linearx, float angularz) {
-	vr_desired = (2.0 * linearx + WHEELDIST * angularz) / (2.0 * WHEELRAD); //linear x should be maximum 4
-	vl_desired = (2.0 * linearx - WHEELDIST * angularz) / (2.0 * WHEELRAD);
-	move_motor (LEFT); // turn it on going backward
-	move_motor (RIGHT); // turn it on going backward
+/* Moves the right wheel
+ */
+void move_left_motor(void) {
+	PID_L.Compute();
+	if (vl_controlled > 0 && vl_controlled <= 255) {
+		digitalWrite(LEFT_MOT_POS, 1);
+		digitalWrite(LEFT_MOT_NEG, 0);
+		analogWrite(LEFT_MOT_EN, vl_controlled);
+	} else if (vl_controlled <= 1 && vl_controlled >= -255) {
+		digitalWrite(LEFT_MOT_POS, 0);
+		digitalWrite(LEFT_MOT_NEG, 1);
+		analogWrite(LEFT_MOT_EN, -1 * vl_controlled);
+	} else {
+		//Stop if received an wrong direction
+		hard_stop (LEFT);
+	}
+
 }
 
-double compute_vel(long curr_pos, long last_pos, long delta_t_us) {
+void move_robot(double linear, double angular) {
+	wheel_vel_from_twist(linear, angular, &vl_desired, &vr_desired);
+	move_left_motor();
+	move_right_motor();
+}
+
+/***This function takes as input the current and last encoder poses,
+ * and gives back the angular velocity of the wheel.
+ */
+double wheel_vel_from_encoder(long curr_pos, long last_pos, long delta_t_us) {
 	double vel = 0;
+	double delta_pose = 0;
 	//First check if denominator is not cero to avoid not defined operations
 	if (delta_t_us > 0) {
-		vel = (last_pos - curr_pos) / delta_t_us;
+		delta_pose = (double) last_pos - curr_pos;
+		vel = (2 * PI * delta_pose) / (delta_t_us * ENCODER_PULSES);
 	}
-
 	return vel;
 }
-//in this example pub is declared before the cmd_vel_cb
-//because it used there
+
+/***This function takes as input robot's linear and angular velocities
+ * and gives back the angular velocities of both left and right wheels
+ */
+void wheel_vel_from_twist(long linear, long angular, double* vlp, double* vrp) {
+	*vlp = (2.0 * linear - WHEELDIST * angular) / (2.0 * WHEELRAD);
+	*vrp = (2.0 * linear + WHEELDIST * angular) / (2.0 * WHEELRAD);
+}
+
 ros::Publisher str_pub("arduino/str_output", &ok_rosstr);
 ros::Publisher lwheel_pose_pub("arduino/lwheel", &lwheel_pose);
 ros::Publisher rwheel_pose_pub("arduino/rwheel", &rwheel_pose);
+ros::Publisher lwheel_vel_pub("arduino/lvel", &lwheel_vel);
+ros::Publisher rwheel_vel_pub("arduino/rvel", &rwheel_vel);
 
 //Twist callback
 void cmd_vel_cb(const geometry_msgs::Twist& cmd_msg) {
@@ -165,6 +175,8 @@ void setup() {
 	nh.advertise(str_pub);
 	nh.advertise(lwheel_pose_pub);
 	nh.advertise(rwheel_pose_pub);
+	nh.advertise(lwheel_vel_pub);
+	nh.advertise(rwheel_vel_pub);
 	ok_rosstr.data = "arduino ok";
 	callback_rosstr.data = "cb executed";
 	pinMode(LED, OUTPUT);
@@ -199,13 +211,14 @@ void loop() {
 	if (newPositionD != oldPositionD) {
 		delta_t = newTimeD - lastTimeD;
 
-		vr_measured = compute_vel(newPositionD, oldPositionD, delta_t);
+		vr_measured = wheel_vel_from_encoder(newPositionD, oldPositionD,
+				delta_t);
 		lastTimeD = newTimeD;
 		oldPositionD = newPositionD;
 
 		lwheel_pose.data = newPositionI;
-		rwheel_pose.data = newPositionD;
 		lwheel_pose_pub.publish(&lwheel_pose);
+		rwheel_pose.data = newPositionD;
 		rwheel_pose_pub.publish(&rwheel_pose);
 		nh.spinOnce();
 	}
@@ -213,20 +226,28 @@ void loop() {
 	if (newPositionI != oldPositionI) {
 		delta_t = newTimeI - lastTimeI;
 
-		vl_measured = compute_vel(newPositionD, oldPositionD, delta_t);
+		vl_measured = wheel_vel_from_encoder(newPositionI, oldPositionI,
+				delta_t);
 
 		lastTimeI = newTimeI;
 		oldPositionI = newPositionI;
 
 		lwheel_pose.data = newPositionI;
-		rwheel_pose.data = newPositionD;
 		lwheel_pose_pub.publish(&lwheel_pose);
+
+		rwheel_pose.data = newPositionD;
 		rwheel_pose_pub.publish(&rwheel_pose);
 		nh.spinOnce();
 	}
 
 	if (!(millis() % CONTROL_RATE)) {//Control the motors every CONTROL_RATE [ms] aprox.
 		move_robot(linear_vel, angular_vel);
+
+		lwheel_vel.data = vl_measured;
+		lwheel_vel_pub.publish(&lwheel_vel);
+
+		rwheel_vel.data = vr_measured;
+		rwheel_vel_pub.publish(&rwheel_vel);
 	}
 
 	if (!(millis() % 3000)) {	//Say I'm ok once in a while

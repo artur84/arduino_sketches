@@ -12,15 +12,15 @@
 #include <std_msgs/String.h>
 #include <geometry_msgs/Vector3.h>
 #include <std_msgs/Int32.h>
+#include <std_msgs/Float32.h>
 #include <Encoder.h>
 #include <PID_v1.h>
 /*******************************
  * Define the material
  ******************************/
-//Para los encoders
+//Arduino pin definitions
 #define ENCDA 20  //ENCODER DERECHO A (YELLOW)
 #define ENCDB 21    //ENCONDER DERECHO B (WHITE)
-
 #define ENCIA 19  //ENCODER IZQUIERDO A (YELLOW)
 #define ENCIB 18    //ENCONDER IZQUIERDO B (WHITE)
 
@@ -30,13 +30,19 @@
 #define LEFT_MOT_POS 6
 #define LEFT_MOT_NEG 5
 #define LEFT_MOT_EN 7 //enable
+
 #define BACKWARD -1  //moves backwards
 #define FORWARD 1
 #define LEFT 1
 #define RIGHT 0
 #define LED 13 //A led that blinks when receiving a message in any topic
+
+//Robot Hardware
 #define WHEELRAD 0.045 //The radius of the wheel (m)
 #define WHEELDIST 0.42 //Distance between wheels (m)
+#define ENCODER_PULSES 8400 //Total number of pulses per revolution given by the encoders.
+
+//Controller parameters
 #define CONTROL_RATE 10 //How often, in milliseconds, the PID will be evaluated. (int>0)
 //end of add your includes here
 #ifdef __cplusplus
