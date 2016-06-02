@@ -16,13 +16,14 @@
 ros::NodeHandle nh;
 std_msgs::String callback_rosstr, ok_rosstr;
 std_msgs::Int32 lwheel_pose, rwheel_pose;
-std_msgs::Float32 lwheel_vel, rwheel_vel;
+std_msgs::Float32 float1, float2, float3;
 volatile float linear_vel = 0, angular_vel = 0;
-long oldPositionI = -999; //long is a 4 bytes type
-long oldPositionD = -999;
+long oldPositionI = 0; //long is a 4 bytes type
+long oldPositionD = 0;
 
-long newPositionD, newPositionI;
-unsigned long newTimeD, newTimeI, lastTimeD, lastTimeI, delta_t;
+long newPositionD = 0, newPositionI = 0;
+unsigned long newTimeD = 0, newTimeI = 0, lastTimeD = 0, lastTimeI = 0,
+		delta_t = 0;
 long last_pos_l, last_pos_r;
 double vl_desired, vr_desired;
 
@@ -139,16 +140,18 @@ double wheel_vel_from_encoder(long curr_pos, long last_pos, long delta_t_us) {
 /***This function takes as input robot's linear and angular velocities
  * and gives back the angular velocities of both left and right wheels
  */
-void wheel_vel_from_twist(long linear, long angular, double* vlp, double* vrp) {
-	*vlp = (2.0 * linear - WHEELDIST * angular) / (2.0 * WHEELRAD);
-	*vrp = (2.0 * linear + WHEELDIST * angular) / (2.0 * WHEELRAD);
+void wheel_vel_from_twist(double linear, double angular, double* vlp,
+		double* vrp) {
+	*vlp = (double) (2.0 * linear - WHEELDIST * angular) / (2.0 * WHEELRAD);
+	*vrp = (double) (2.0 * linear + WHEELDIST * angular) / (2.0 * WHEELRAD);
 }
 
 ros::Publisher str_pub("arduino/str_output", &ok_rosstr);
 ros::Publisher lwheel_pose_pub("arduino/lwheel", &lwheel_pose);
 ros::Publisher rwheel_pose_pub("arduino/rwheel", &rwheel_pose);
-ros::Publisher lwheel_vel_pub("arduino/lvel", &lwheel_vel);
-ros::Publisher rwheel_vel_pub("arduino/rvel", &rwheel_vel);
+ros::Publisher pub_1("arduino/pub_1", &float1);
+ros::Publisher pub_2("arduino/pub_2", &float2);
+ros::Publisher pub_3("arduino/pub_3", &float3);
 
 //Twist callback
 void cmd_vel_cb(const geometry_msgs::Twist& cmd_msg) {
@@ -175,8 +178,9 @@ void setup() {
 	nh.advertise(str_pub);
 	nh.advertise(lwheel_pose_pub);
 	nh.advertise(rwheel_pose_pub);
-	nh.advertise(lwheel_vel_pub);
-	nh.advertise(rwheel_vel_pub);
+	nh.advertise(pub_1);
+	nh.advertise(pub_2);
+	nh.advertise(pub_3);
 	ok_rosstr.data = "arduino ok";
 	callback_rosstr.data = "cb executed";
 	pinMode(LED, OUTPUT);
@@ -243,11 +247,14 @@ void loop() {
 	if (!(millis() % CONTROL_RATE)) {//Control the motors every CONTROL_RATE [ms] aprox.
 		move_robot(linear_vel, angular_vel);
 
-		lwheel_vel.data = vl_measured;
-		lwheel_vel_pub.publish(&lwheel_vel);
+		float1.data = (float) vl_desired;
+		pub_1.publish(&float1);
 
-		rwheel_vel.data = vr_measured;
-		rwheel_vel_pub.publish(&rwheel_vel);
+		float2.data = (float) vl_measured;
+		pub_2.publish(&float2);
+
+		float3.data = (float) linear_vel;
+		pub_3.publish(&float3);
 	}
 
 	if (!(millis() % 3000)) {	//Say I'm ok once in a while
