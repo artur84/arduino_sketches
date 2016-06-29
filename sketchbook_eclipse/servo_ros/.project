@@ -41,6 +41,16 @@
 			<type>2</type>
 			<locationURI>ArduinoPlatformPath</locationURI>
 		</link>
+		<link>
+			<name>core/core</name>
+			<type>2</type>
+			<location>/home/arturo/arduino-1.6.0/hardware/arduino/avr/cores</location>
+		</link>
+		<link>
+			<name>libraries/Servo</name>
+			<type>2</type>
+			<location>/home/arturo/ActiveSoftware/eclipse_mars/arduinoPlugin/libraries/Servo/1.1.1</location>
+		</link>
 	</linkedResources>
 	<variableList>
 		<variable>

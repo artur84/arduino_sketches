@@ -46,6 +46,11 @@
 			<type>2</type>
 			<locationURI>ArduinoPlatformPath</locationURI>
 		</link>
+		<link>
+			<name>core/core</name>
+			<type>2</type>
+			<location>/home/arturo/arduino-1.6.0/hardware/arduino/avr/cores</location>
+		</link>
 	</linkedResources>
 	<variableList>
 		<variable>
