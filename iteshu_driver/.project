@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <projectDescription>
-	<name>motor_pid_control</name>
+	<name>iteshu_driver</name>
 	<comment></comment>
 	<projects>
 	</projects>
@@ -42,9 +42,19 @@
 			<location>/home/arturo/ActiveSoftware/eclipseArduino/arduinoPlugin/packages/arduino/hardware/avr/1.6.11/variants/mega</location>
 		</link>
 		<link>
+			<name>libraries/Encoder</name>
+			<type>2</type>
+			<location>/home/arturo/arduino_sketches/libraries/Encoder</location>
+		</link>
+		<link>
 			<name>libraries/PID-Library</name>
 			<type>2</type>
 			<location>/home/arturo/arduino_sketches/libraries/PID-Library</location>
+		</link>
+		<link>
+			<name>libraries/ros_lib</name>
+			<type>2</type>
+			<location>/home/arturo/arduino_sketches/libraries/ros_lib</location>
 		</link>
 	</linkedResources>
 </projectDescription>

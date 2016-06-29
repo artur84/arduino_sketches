@@ -2,17 +2,14 @@
 //This is a automatic generated file
 //Please do not modify this file
 //If you touch this file your change will be overwritten during the next build
-//This file has been generated on 2016-06-28 22:45:09
+//This file has been generated on 2016-06-28 22:47:21
 
 #include "Arduino.h"
-#include "dc_motors.h"
-void move_motor(int motor, int dir, int speed) ;
-void hard_stop(int motor) ;
-void soft_stop(int motor) ;
+#include <PID_v1.h>
 void setup() ;
 void loop() ;
 
-#include "dc_motors.ino"
+#include "motor_pid_control.ino"
 
 
 #endif
