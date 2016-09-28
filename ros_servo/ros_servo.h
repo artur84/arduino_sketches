@@ -22,9 +22,5 @@
 #define SERVO_SIGNAL_PIN 9 //Connect Servo Signal cable (white or yellow) to this pin
 #define LED 13  // Arduino led
 
-
-
-
-
 //Do not add code below this line
 #endif /* _ros_servo_H_ */

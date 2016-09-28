@@ -1,0 +1,9 @@
+- First create a directory with the name of the desired package at 
+	arduino_sketches/(NEW DIR NAME)
+
+- Select New->Project in eclipse
+- Select Arduino-> New Arduino Sketch 
+- click NEXT
+- Project name: (NEW DIR NAME),  path: arduino_sketches/(NEW DIR NAME)
+
+...
