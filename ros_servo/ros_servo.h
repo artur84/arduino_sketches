@@ -3,9 +3,14 @@
 // - include files
 // - extern variable definitions
 // In the appropriate section
-
 #ifndef _ros_servo_H_
 #define _ros_servo_H_
+/*****************************************
+ * rosserial Servo Control
+ *****************************************
+ * This sketch demonstrates the control of hobby R/C servos
+ * using ROS and the arduiono
+ */
 
 //#define USE_USBCON This is used only for Leonardo board (ROS needs this)
 #include <Arduino.h>
