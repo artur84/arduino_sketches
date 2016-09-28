@@ -49,7 +49,7 @@
 		<link>
 			<name>libraries/Servo</name>
 			<type>2</type>
-			<location>/home/arturo/ActiveSoftware/eclipse_mars/arduinoPlugin/libraries/Servo/1.1.1</location>
+			<location>/home/arturo/ActiveSoftware/eclipseArduino/arduinoPlugin/libraries/Servo/1.1.1</location>
 		</link>
 	</linkedResources>
 	<variableList>
