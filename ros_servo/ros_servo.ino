@@ -12,7 +12,7 @@ Servo servo;
 
 //ROS stuff
 ros::NodeHandle  nh;
-ros::Subscriber<std_msgs::UInt16> sub("servo", servo_cb);
+
 
 
 /*** This callback is called when a message is received from ROS
@@ -24,7 +24,7 @@ void servo_cb( const std_msgs::UInt16& cmd_msg){
   digitalWrite(LED, HIGH-digitalRead(LED));  //toggle led
 }
 
-
+ros::Subscriber<std_msgs::UInt16> sub("servo", servo_cb);
 
 
 void setup(){
