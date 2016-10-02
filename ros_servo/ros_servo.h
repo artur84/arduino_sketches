@@ -23,7 +23,7 @@
 #define SERVO_PITCH_SIGNAL_PIN 8 //Connect Servo Signal cable (white or yellow) to this pin
 #define LED 13  // Arduino led
 #define PITCH_INITIAL_ANGLE 40 //ANGLE IN DEGREES
-#define YAW_INITIAL_ANGLE 110 //ANGLE IN DEGREES
+#define YAW_INITIAL_ANGLE 110  //ANGLE IN DEGREES
 
 //Do not add code below this line
 #endif /* _ros_servo_H_ */
