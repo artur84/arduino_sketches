@@ -18,33 +18,33 @@
 void move_motor(int motor, int dir, int speed) {
 	if (motor == LEFT) {
 		if (dir == FORWARD) {
-			digitalWrite(LEFT_MOT_POS, 1);
-			digitalWrite(LEFT_MOT_NEG, 0);
+			digitalWrite(LEFT_MOT_DIR_FRONT, 1);
+			digitalWrite(LEFT_MOT_DIR_BACK, 0);
 			analogWrite(LEFT_MOT_EN, speed);
 		} else if (dir == BACKWARD) {
-			digitalWrite(LEFT_MOT_POS, 0);
-			digitalWrite(LEFT_MOT_NEG, 1);
+			digitalWrite(LEFT_MOT_DIR_FRONT, 0);
+			digitalWrite(LEFT_MOT_DIR_BACK, 1);
 			analogWrite(LEFT_MOT_EN, speed);
 		} else {
 			//Stop if received an wrong direction
-			digitalWrite(LEFT_MOT_POS, 0);
-			digitalWrite(LEFT_MOT_NEG, 0);
+			digitalWrite(LEFT_MOT_DIR_FRONT, 0);
+			digitalWrite(LEFT_MOT_DIR_BACK, 0);
 			analogWrite(LEFT_MOT_EN, 0);
 		}
 
 	} else if (motor == RIGHT) {
 		if (dir == FORWARD) {
-			digitalWrite(RIGHT_MOT_POS, 1);
-			digitalWrite(RIGHT_MOT_NEG, 0);
+			digitalWrite(RIGHT__MOT_DIR_FRONT, 1);
+			digitalWrite(RIGHT_MOT_DIR_BACK, 0);
 			analogWrite(RIGHT_MOT_EN, speed);
 		} else if (dir == BACKWARD) {
-			digitalWrite(RIGHT_MOT_POS, 0);
-			digitalWrite(RIGHT_MOT_NEG, 1);
+			digitalWrite(RIGHT__MOT_DIR_FRONT, 0);
+			digitalWrite(RIGHT_MOT_DIR_BACK, 1);
 			analogWrite(RIGHT_MOT_EN, speed);
 		} else {
 			//Stop if received an wrong direction
-			digitalWrite(RIGHT_MOT_POS, 0);
-			digitalWrite(RIGHT_MOT_NEG, 0);
+			digitalWrite(RIGHT__MOT_DIR_FRONT, 0);
+			digitalWrite(RIGHT_MOT_DIR_BACK, 0);
 			analogWrite(RIGHT_MOT_EN, 0);
 		}
 
@@ -58,13 +58,13 @@ void move_motor(int motor, int dir, int speed) {
 void hard_stop(int motor) {
 	//Stop if received an wrong direction
 	if (motor == LEFT) {
-		digitalWrite(LEFT_MOT_POS, 1);
-		digitalWrite(LEFT_MOT_NEG, 1);
+		digitalWrite(LEFT_MOT_DIR_FRONT, 1);
+		digitalWrite(LEFT_MOT_DIR_BACK, 1);
 		analogWrite(LEFT_MOT_EN, 255);
 	} else if (motor == RIGHT) {
 		//Stop if received an wrong direction
-		digitalWrite(RIGHT_MOT_POS, 1);
-		digitalWrite(RIGHT_MOT_NEG, 1);
+		digitalWrite(RIGHT__MOT_DIR_FRONT, 1);
+		digitalWrite(RIGHT_MOT_DIR_BACK, 1);
 		analogWrite(RIGHT_MOT_EN, 255);
 	}
 }
@@ -75,13 +75,13 @@ void hard_stop(int motor) {
 void soft_stop(int motor) {
 	//Stop if received an wrong direction
 	if (motor == LEFT) {
-		digitalWrite(LEFT_MOT_POS, 0);
-		digitalWrite(LEFT_MOT_NEG, 0);
+		digitalWrite(LEFT_MOT_DIR_FRONT, 0);
+		digitalWrite(LEFT_MOT_DIR_BACK, 0);
 		analogWrite(LEFT_MOT_EN, 0);
 	} else if (motor == RIGHT) {
 		//Stop if received an wrong direction
-		digitalWrite(RIGHT_MOT_POS, 0);
-		digitalWrite(RIGHT_MOT_NEG, 0);
+		digitalWrite(RIGHT__MOT_DIR_FRONT, 0);
+		digitalWrite(RIGHT_MOT_DIR_BACK, 0);
 		analogWrite(RIGHT_MOT_EN, 0);
 	}
 }
@@ -91,11 +91,11 @@ void soft_stop(int motor) {
  */
 void setup() {
 	pinMode(13, OUTPUT);
-	pinMode(LEFT_MOT_NEG, OUTPUT);
-	pinMode(LEFT_MOT_POS, OUTPUT);
+	pinMode(LEFT_MOT_DIR_BACK, OUTPUT);
+	pinMode(LEFT_MOT_DIR_FRONT, OUTPUT);
 	pinMode(LEFT_MOT_EN, OUTPUT);
-	pinMode(RIGHT_MOT_NEG, OUTPUT);
-	pinMode(RIGHT_MOT_POS, OUTPUT);
+	pinMode(RIGHT_MOT_DIR_BACK, OUTPUT);
+	pinMode(RIGHT__MOT_DIR_FRONT, OUTPUT);
 	pinMode(RIGHT_MOT_EN, OUTPUT);
 }
 
@@ -107,7 +107,7 @@ void loop() {
 	//in the ros topic
 	int i = 20;
 
-	while (i <= 80) {
+	while (i <= 250) {
 		move_motor(RIGHT, FORWARD, i);
 		move_motor(LEFT, FORWARD, i);
 		i += 10;
@@ -117,7 +117,7 @@ void loop() {
 	hard_stop(LEFT);
 	hard_stop(RIGHT);
 	delay(1000);
-	while (i <= 80) {
+	while (i <= 250) {
 		move_motor(RIGHT, BACKWARD, i);
 		move_motor(LEFT, BACKWARD, i);
 		delay(500);

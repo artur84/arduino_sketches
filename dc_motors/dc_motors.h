@@ -12,13 +12,18 @@
 /*******************************
  * Define the material
  ******************************/
-#define RIGHT_MOT_POS 2
-#define RIGHT_MOT_NEG 3
-#define RIGHT_MOT_EN 5 //enable
-#define LEFT_MOT_POS 4
-#define LEFT_MOT_NEG 7
-#define LEFT_MOT_EN 6 //enable
+#define RIGHT__MOT_DIR_FRONT 49
+#define RIGHT_MOT_DIR_BACK 48
+#define RIGHT_MOT_EN 2 //enable
+#define LEFT_MOT_DIR_FRONT 51
+#define LEFT_MOT_DIR_BACK 50
+#define LEFT_MOT_EN 3 //enable
 #define BACKWARD -1  //moves backwards
+
+
+/*******************************
+ * Other tags
+ *******************************/
 #define FORWARD 1
 #define LEFT 1
 #define RIGHT 0
