@@ -40,8 +40,8 @@ PID PID_L(&vl_measured, &vl_controlled, &vl_desired, consKp, consKi, consKd,
 		DIRECT);
 
 //   avoid using pins with LEDs attached
-Encoder myEncD(ENCDA, ENCDB);
-Encoder myEncI(ENCIA, ENCIB);
+Encoder myEncD(RIGHT_ENC_A, RIGHT_ENC_B);
+Encoder myEncI(LEFT_ENC_A, LEFT_ENC_B);
 
 /*
  * My functions
@@ -52,13 +52,13 @@ Encoder myEncI(ENCIA, ENCIB);
 void hard_stop(int motor) {
 	//Stop if received an wrong direction
 	if (motor == LEFT) {
-		digitalWrite(LEFT_MOT_POS, 1);
-		digitalWrite(LEFT_MOT_NEG, 1);
+		digitalWrite(LEFT_MOT_DIR_FRONT, 1);
+		digitalWrite(LEFT_MOT_DIR_BACK, 1);
 		analogWrite(LEFT_MOT_EN, 255);
 	} else if (motor == RIGHT) {
 		//Stop if received an wrong direction
-		digitalWrite(RIGHT_MOT_POS, 1);
-		digitalWrite(RIGHT_MOT_NEG, 1);
+		digitalWrite(RIGHT__MOT_DIR_FRONT, 1);
+		digitalWrite(RIGHT_MOT_DIR_BACK, 1);
 		analogWrite(RIGHT_MOT_EN, 255);
 	}
 }
@@ -69,13 +69,13 @@ void hard_stop(int motor) {
 void soft_stop(int motor) {
 	//Stop if received an wrong direction
 	if (motor == LEFT) {
-		digitalWrite(LEFT_MOT_POS, 0);
-		digitalWrite(LEFT_MOT_NEG, 0);
+		digitalWrite(LEFT_MOT_DIR_FRONT, 0);
+		digitalWrite(LEFT_MOT_DIR_BACK, 0);
 		analogWrite(LEFT_MOT_EN, 0);
 	} else if (motor == RIGHT) {
 		//Stop if received an wrong direction
-		digitalWrite(RIGHT_MOT_POS, 0);
-		digitalWrite(RIGHT_MOT_NEG, 0);
+		digitalWrite(RIGHT__MOT_DIR_FRONT, 0);
+		digitalWrite(RIGHT_MOT_DIR_BACK, 0);
 		analogWrite(RIGHT_MOT_EN, 0);
 	}
 }
@@ -84,12 +84,12 @@ void soft_stop(int motor) {
 void move_right_motor(void) {
 	PID_R.Compute();
 	if (vr_controlled > 0 && vr_controlled <= 255) {
-		digitalWrite(RIGHT_MOT_POS, 1);
-		digitalWrite(RIGHT_MOT_NEG, 0);
+		digitalWrite(RIGHT__MOT_DIR_FRONT, 1);
+		digitalWrite(RIGHT_MOT_DIR_BACK, 0);
 		analogWrite(RIGHT_MOT_EN, (int) vr_controlled);
 	} else {
-		digitalWrite(RIGHT_MOT_POS, 0);
-		digitalWrite(RIGHT_MOT_NEG, 1);
+		digitalWrite(RIGHT__MOT_DIR_FRONT, 0);
+		digitalWrite(RIGHT_MOT_DIR_BACK, 1);
 		analogWrite(RIGHT_MOT_EN, -1 * (int) vr_controlled);
 	}
 }
@@ -99,12 +99,12 @@ void move_right_motor(void) {
 void move_left_motor(void) {
 	PID_L.Compute();
 	if (vl_controlled > 0 && vl_controlled <= 255) {
-		digitalWrite(LEFT_MOT_POS, 1);
-		digitalWrite(LEFT_MOT_NEG, 0);
+		digitalWrite(LEFT_MOT_DIR_FRONT, 1);
+		digitalWrite(LEFT_MOT_DIR_BACK, 0);
 		analogWrite(LEFT_MOT_EN, (int) vl_controlled);
 	} else {
-		digitalWrite(LEFT_MOT_POS, 0);
-		digitalWrite(LEFT_MOT_NEG, 1);
+		digitalWrite(LEFT_MOT_DIR_FRONT, 0);
+		digitalWrite(LEFT_MOT_DIR_BACK, 1);
 		analogWrite(LEFT_MOT_EN, -1 * (int) vl_controlled);
 	}
 
@@ -178,11 +178,11 @@ void setup() {
 	ok_rosstr.data = "arduino ok";
 	callback_rosstr.data = "cb executed";
 	pinMode(LED, OUTPUT);
-	pinMode(LEFT_MOT_NEG, OUTPUT);
-	pinMode(LEFT_MOT_POS, OUTPUT);
+	pinMode(LEFT_MOT_DIR_BACK, OUTPUT);
+	pinMode(LEFT_MOT_DIR_FRONT, OUTPUT);
 	pinMode(LEFT_MOT_EN, OUTPUT);
-	pinMode(RIGHT_MOT_NEG, OUTPUT);
-	pinMode(RIGHT_MOT_POS, OUTPUT);
+	pinMode(RIGHT_MOT_DIR_BACK, OUTPUT);
+	pinMode(RIGHT__MOT_DIR_FRONT, OUTPUT);
 	pinMode(RIGHT_MOT_EN, OUTPUT);
 
 //Turn the PID on

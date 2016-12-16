@@ -19,17 +19,17 @@
  * Define the material
  ******************************/
 //Arduino pin definitions
-#define ENCDA 20  //ENCODER DERECHO A (YELLOW)
-#define ENCDB 21    //ENCONDER DERECHO B (WHITE)
-#define ENCIA 19  //ENCODER IZQUIERDO A (YELLOW)
-#define ENCIB 18    //ENCONDER IZQUIERDO B (WHITE)
+#define RIGHT_ENC_A 18  //ENCODER DERECHO A (YELLOW)
+#define RIGHT_ENC_B 19    //ENCONDER DERECHO B (WHITE)
+#define LEFT_ENC_A 20  //ENCODER IZQUIERDO A (YELLOW)
+#define LEFT_ENC_B 21    //ENCONDER IZQUIERDO B (WHITE)
 
-#define RIGHT_MOT_POS 3
-#define RIGHT_MOT_NEG 2
-#define RIGHT_MOT_EN 4 //enable
-#define LEFT_MOT_POS 6
-#define LEFT_MOT_NEG 5
-#define LEFT_MOT_EN 7 //enable
+#define RIGHT_MOT_DIR_BACK 48
+#define RIGHT__MOT_DIR_FRONT 49
+#define RIGHT_MOT_EN 2 //enable
+#define LEFT_MOT_DIR_BACK 50
+#define LEFT_MOT_DIR_FRONT 51
+#define LEFT_MOT_EN 3 //enable
 
 #define BACKWARD -1  //moves backwards
 #define FORWARD 1
