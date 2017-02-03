@@ -23,7 +23,8 @@ ros::NodeHandle nh;
 std_msgs::String callback_rosstr, ok_rosstr;
 std_msgs::Int32 lwheel_pose, rwheel_pose;
 std_msgs::Float32 float1, float2, float3;
-volatile float linear_vel = 0, angular_vel = 0;
+volatile float linear_vel = 0; //[m/s] ROS twist angular vel
+volatile float angular_vel = 0;//[rad/sec] ROS twist angular vel
 long oldPositionI = 0; //long is a 4 bytes type
 long oldPositionD = 0;
 
@@ -33,16 +34,17 @@ unsigned long newTimeD = 0, newTimeI = 0, lastTimeD = 0, lastTimeI = 0,
 long last_pos_l, last_pos_r;
 
 //Define Variables we'll be connecting to
-double vr_desired = 0, vr_measured = 0, vr_controlled = 0;
-double vl_desired = 0, vl_measured = 0, vl_controlled = 0;
+double wr_desired = 0, wr_measured = 0;//[rad/sec]
+double vr_controlled = 0, vl_controlled = 0; //[pwm] 0-255
+double wl_desired = 0, wl_measured = 0; //[rad/sec]
 
 //Define the aggressive and conservative Tuning Parameters
-double consKp = 50, consKi = 10.0, consKd = 0.0;
+double consKp = 50, consKi = 0.1, consKd = 0.01;
 
 //Specify the links and initial tuning parameters
-PID PID_R(&vr_measured, &vr_controlled, &vr_desired, consKp, consKi, consKd,
+PID PID_R(&wr_measured, &vr_controlled, &wr_desired, consKp, consKi, consKd,
 		DIRECT);
-PID PID_L(&vl_measured, &vl_controlled, &vl_desired, consKp, consKi, consKd,
+PID PID_L(&wl_measured, &vl_controlled, &wl_desired, consKp, consKi, consKd,
 		DIRECT);
 
 //   avoid using pins with LEDs attached
@@ -124,34 +126,42 @@ void move_robot(double linear, double angular) {
 	}
 	else
 	{
-		wheel_vel_from_twist(linear, angular, &vl_desired, &vr_desired);
 		move_left_motor();
 		move_right_motor();
 	}
 }
 
 /***This function takes as input the current and last encoder poses,
- * and gives back the angular velocity of the wheel.
+ * and gives back the angular velocity of the wheel in [rad/sec]
+ *
+ * @ curr_pos [ticks]
+ * @ last_pos [ticks]
+ * @ delta_t_us [us]
+ * return vel [rad/sec]
  */
 double wheel_vel_from_encoder(long curr_pos, long last_pos, long delta_t_us) {
-	double vel = 0;
-	double delta_pose = 0;
-//First check if denominator is not cero to avoid not defined operations
+	double vel = 0; //[rad/sec]
+	double delta_pose = 0; //[ticks]
+	//First check if denominator is not cero to avoid not defined operations
 	if (delta_t_us > 0) {
 		delta_pose = (double) (curr_pos - last_pos);
-		vel = (2 * PI * delta_pose)
-				/ ((delta_t_us / 1000000.0) * ENCODER_PULSES); //TODO: Avoid the divisions
+		// [rad/sec] (Dp*2pi/(Dt*encoder_pulses*0.000001)
+		vel = (delta_pose*2*PI) / (delta_t_us *0.000001* ENCODER_PULSES);
 	}
 	return vel;
 }
 
-/***This function takes as input robot's linear and angular velocities
- * and gives back the angular velocities of both left and right wheels
+/***This function takes as input robot's linear [m/s] and angular [rad/sec] velocities
+ * and gives back the angular velocities [[rad/s]of both left and right wheels
+ * @ linear [m/s]
+ * @ angular [rad/sec]
+ * @ wl_pointer [rad/sec] pointer to left vel
+ * @ wr_pointer [rad/sec] pointer to right vel
  */
-void wheel_vel_from_twist(double linear, double angular, double* vlp,
-		double* vrp) {
-	*vlp = (double) (2.0 * linear - WHEELDIST * angular) / (2.0 * WHEELRAD);
-	*vrp = (double) (2.0 * linear + WHEELDIST * angular) / (2.0 * WHEELRAD);
+void wheel_vel_from_twist(double linear, double angular, double* wl_pointer,
+		double* wr_pointer) {
+	*wl_pointer = (double) (2.0 * linear - WHEELDIST * angular) / (2.0 * WHEELRAD);
+	*wr_pointer = (double) (2.0 * linear + WHEELDIST * angular) / (2.0 * WHEELRAD);
 }
 
 /***This function takes as input wheel's angular velocities and outputs the linear and angular velocities
@@ -191,9 +201,10 @@ ros::Publisher pub_3("arduino/pub_3", &float3);
 //Twist callback
 void cmd_vel_cb(const geometry_msgs::Twist& cmd_msg) {
 	digitalWrite(LED, HIGH - digitalRead(LED)); //toggles a led
-//str_pub.publish(&callback_rosstr);
+    //str_pub.publish(&callback_rosstr);
 	linear_vel = cmd_msg.linear.x;
 	angular_vel = cmd_msg.angular.z;
+	wheel_vel_from_twist(linear_vel, angular_vel, &wl_desired, &wr_desired);
 }
 
 //String callback
@@ -249,16 +260,16 @@ void loop() {
 	if (!(millis() % ODOMETRY_RATE)) {
 		//TODO: here we should publish the odometry message
 
-		delta_t_us = ODOMETRY_RATE*1000; //Time in m
+		delta_t_us = ODOMETRY_RATE*1000; //Time in us
 
-		rwheel_pose.data = newPositionD;
-		lwheel_pose.data = newPositionI;
+		rwheel_pose.data = newPositionD; //Position in ticks
+		lwheel_pose.data = newPositionI; //Position in ticks
 
 		rwheel_pose_pub.publish(&rwheel_pose);
 		lwheel_pose_pub.publish(&lwheel_pose);
 
-		vr_measured = wheel_vel_from_encoder(newPositionD, oldPositionD, delta_t_us);
-		vl_measured = wheel_vel_from_encoder(newPositionI, oldPositionI, delta_t_us);
+		wr_measured = wheel_vel_from_encoder(newPositionD, oldPositionD, delta_t_us);
+		wl_measured = wheel_vel_from_encoder(newPositionI, oldPositionI, delta_t_us);
 
 		oldPositionD = newPositionD;
 		oldPositionI = newPositionI;
@@ -273,10 +284,10 @@ void loop() {
 	if (!(millis() % CONTROL_RATE)) { //Control the motors every CONTROL_RATE [ms] aprox.
 		move_robot(linear_vel, angular_vel);
 
-		float1.data = (float) vr_desired;//TODO: Delete this once that debugging is finished
+		float1.data = (float) wr_desired;//TODO: Delete this once that debugging is finished
 		pub_1.publish(&float1);
 
-		float2.data = (float) vr_measured;
+		float2.data = (float) wr_measured;
 		pub_2.publish(&float2);
 
 		float3.data = (float) vr_controlled;

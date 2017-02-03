@@ -38,14 +38,14 @@
 #define LED 13 //A led that blinks when receiving a message in any topic
 
 //Robot Hardware
-#define WHEELRAD 0.045 //The radius of the wheel (m)
-#define WHEELDIST 0.42 //Distance between wheels (m)
-#define ENCODER_PULSES 8400 //Total number of pulses per revolution given by the encoders.
+#define WHEELRAD 0.045 //[m] The radius of the wheel
+#define WHEELDIST 0.42 //[m] Distance between wheels
+#define ENCODER_PULSES 8400 //[ticks/rev] Total number of pulses per revolution given by the encoders.
 
 //Controller parameters
-#define CONTROL_RATE 10 //How often, in milliseconds, the PID will be evaluated. (int>0)
+#define CONTROL_RATE 20 //How often, in milliseconds, the PID will be evaluated. (int>0)
 #define OK_RATE  3000   //How often, in milliseconds, the OK message will be sent. (int>0)
-#define ODOMETRY_RATE  10   //How often, in milliseconds, the ODEOMETRY message will be sent. (int>0)
+#define ODOMETRY_RATE  20   //How often, in milliseconds, the ODEOMETRY message will be sent. (int>0)
 //end of add your includes here
 #ifdef __cplusplus
 extern "C" {
