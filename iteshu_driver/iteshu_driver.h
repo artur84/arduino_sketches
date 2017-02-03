@@ -10,7 +10,7 @@
 #include <ros.h>
 #include <geometry_msgs/Twist.h>
 #include <std_msgs/String.h>
-#include <geometry_msgs/Vector3.h>
+#include <nav_msgs/Odometry.h>
 #include <std_msgs/Int32.h>
 #include <std_msgs/Float32.h>
 #include <Encoder.h>
@@ -44,6 +44,8 @@
 
 //Controller parameters
 #define CONTROL_RATE 10 //How often, in milliseconds, the PID will be evaluated. (int>0)
+#define OK_RATE  3000   //How often, in milliseconds, the OK message will be sent. (int>0)
+#define ODOMETRY_RATE  10   //How often, in milliseconds, the ODEOMETRY message will be sent. (int>0)
 //end of add your includes here
 #ifdef __cplusplus
 extern "C" {

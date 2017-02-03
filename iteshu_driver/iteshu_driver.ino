@@ -5,9 +5,15 @@
  * and commands two motors according to the linear.x
  * value of the received Twist.
  *
- * We send the encoders information as a Vector3 message, where the first
- * element is the left wheel data and the second element is the right wheel data.
+ * We send encoder's info as a odometry message
+ * use with roslaunch file:
+ *
+ * -------$ roslaunch iteshu_robot start_rosserial.launch port:=/dev/ttyUSB0
+ *
+ *
+ *
  * mantainer: arturoescobedo.iq@gmail.com
+ *
  */
 
 /*
@@ -23,7 +29,7 @@ long oldPositionD = 0;
 
 long newPositionD = 0, newPositionI = 0;
 unsigned long newTimeD = 0, newTimeI = 0, lastTimeD = 0, lastTimeI = 0,
-		delta_t = 0;
+		delta_t_us = 0;
 long last_pos_l, last_pos_r;
 
 //Define Variables we'll be connecting to
@@ -111,9 +117,17 @@ void move_left_motor(void) {
 }
 
 void move_robot(double linear, double angular) {
-	wheel_vel_from_twist(linear, angular, &vl_desired, &vr_desired);
-	move_left_motor();
-	move_right_motor();
+	if(linear==0 && angular==0 ) //Hard Stop
+	{
+		hard_stop(LEFT);
+		hard_stop(RIGHT);
+	}
+	else
+	{
+		wheel_vel_from_twist(linear, angular, &vl_desired, &vr_desired);
+		move_left_motor();
+		move_right_motor();
+	}
 }
 
 /***This function takes as input the current and last encoder poses,
@@ -126,7 +140,7 @@ double wheel_vel_from_encoder(long curr_pos, long last_pos, long delta_t_us) {
 	if (delta_t_us > 0) {
 		delta_pose = (double) (curr_pos - last_pos);
 		vel = (2 * PI * delta_pose)
-				/ ((delta_t_us / 1000000.0) * ENCODER_PULSES);
+				/ ((delta_t_us / 1000000.0) * ENCODER_PULSES); //TODO: Avoid the divisions
 	}
 	return vel;
 }
@@ -138,6 +152,33 @@ void wheel_vel_from_twist(double linear, double angular, double* vlp,
 		double* vrp) {
 	*vlp = (double) (2.0 * linear - WHEELDIST * angular) / (2.0 * WHEELRAD);
 	*vrp = (double) (2.0 * linear + WHEELDIST * angular) / (2.0 * WHEELRAD);
+}
+
+/***This function takes as input wheel's angular velocities and outputs the linear and angular velocities
+ *   w_right in [rps]
+ *   w_left [rps]
+ *   linear [m/s]
+ *   angular [rad/seg]
+ */
+void twist_from_wheel_vel(double w_right, double w_left, double* linear, double* angular) {
+	*linear = (double) (WHEELRAD/2)*(w_right+w_left);
+	*angular = (double) (WHEELRAD/WHEELDIST)*(w_right-w_left);
+}
+
+/***This function outpus (x,y,phi) of the robot
+ * It assumes that x,y and phi arguments are the last computed values.
+ * Dr, Dl, x, y: [m]
+ * phi: [rad]
+ *
+ */
+void compute_odom(double Dr, double Dl, double* x, double* y,  double* phi) {
+	double Dc=(Dl+Dr)/2;
+	double x_prev=*x;
+	double y_prev=*y;
+	double phi_prev=*phi;
+	*phi = (double) phi_prev*(Dr-Dl)/2;
+	*x = (double) x_prev+Dc*cos(*phi);
+	*y = (double) y_prev+Dc*sin(*phi);
 }
 
 ros::Publisher str_pub("arduino/str_output", &ok_rosstr);
@@ -187,7 +228,7 @@ void setup() {
 
 //Turn the PID on
 	PID_R.SetSampleTime(CONTROL_RATE);
-	PID_R.SetOutputLimits(0, 255); //It will set the output of the controller to be between
+	PID_R.SetOutputLimits(-255, 255); //It will set the output of the controller to be between
 	PID_R.SetMode(AUTOMATIC);
 
 	PID_L.SetSampleTime(CONTROL_RATE);
@@ -201,57 +242,48 @@ void setup() {
  */
 void loop() {
 	newPositionD = myEncD.read();
-	newTimeD = micros();
 	newPositionI = myEncI.read();
-	newTimeI = micros();
 	//I will just keep the loop waiting for a message
 	//in the ros topic
-	if (newPositionD != oldPositionD) {
-		delta_t = newTimeD - lastTimeD;
 
-		vr_measured = wheel_vel_from_encoder(newPositionD, oldPositionD,
-				delta_t);
-		lastTimeD = newTimeD;
-		oldPositionD = newPositionD;
+	if (!(millis() % ODOMETRY_RATE)) {
+		//TODO: here we should publish the odometry message
 
-		lwheel_pose.data = newPositionI;
-		lwheel_pose_pub.publish(&lwheel_pose);
+		delta_t_us = ODOMETRY_RATE*1000; //Time in m
+
 		rwheel_pose.data = newPositionD;
+		lwheel_pose.data = newPositionI;
+
 		rwheel_pose_pub.publish(&rwheel_pose);
-		nh.spinOnce();
-	}
+		lwheel_pose_pub.publish(&lwheel_pose);
 
-	if (newPositionI != oldPositionI) {
-		delta_t = newTimeI - lastTimeI;
+		vr_measured = wheel_vel_from_encoder(newPositionD, oldPositionD, delta_t_us);
+		vl_measured = wheel_vel_from_encoder(newPositionI, oldPositionI, delta_t_us);
 
-		vl_measured = wheel_vel_from_encoder(newPositionI, oldPositionI,
-				delta_t);
-
-		lastTimeI = newTimeI;
+		oldPositionD = newPositionD;
 		oldPositionI = newPositionI;
 
-		lwheel_pose.data = newPositionI;
-		lwheel_pose_pub.publish(&lwheel_pose);
-
 		rwheel_pose.data = newPositionD;
+		lwheel_pose.data = newPositionI;
+
 		rwheel_pose_pub.publish(&rwheel_pose);
-		nh.spinOnce();
+		lwheel_pose_pub.publish(&lwheel_pose);
 	}
 
 	if (!(millis() % CONTROL_RATE)) { //Control the motors every CONTROL_RATE [ms] aprox.
 		move_robot(linear_vel, angular_vel);
 
-		float1.data = (float) vl_desired;
+		float1.data = (float) vr_desired;//TODO: Delete this once that debugging is finished
 		pub_1.publish(&float1);
 
-		float2.data = (float) vl_measured;
+		float2.data = (float) vr_measured;
 		pub_2.publish(&float2);
 
-		float3.data = (float) vl_controlled;
+		float3.data = (float) vr_controlled;
 		pub_3.publish(&float3);
 	}
 
-	if (!(millis() % 3000)) {	//Say I'm ok once in a while
+	if (!(millis() % OK_RATE)) {	//Say I'm ok once in a while
 		str_pub.publish(&ok_rosstr);
 		nh.spinOnce();
 	}
