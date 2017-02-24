@@ -46,7 +46,8 @@ Timer t;
  *
  * (2000*PI)/(ENCODER_PULSES*READ_ENCODER_RATE_MILLIS) ===> speed_constant
  */
-const double speed_constant = (2000*PI)/(ENCODER_PULSES*READ_ENCODER_RATE_MILLIS); //wheel_speed[rad/s] =(Delta_pulses)*speed_constant
+const double speed_constant = (2000 * PI)
+		/ (ENCODER_PULSES * READ_ENCODER_RATE_MILLIS); //wheel_speed[rad/s] =(Delta_pulses)*speed_constant
 double wheel_speed = 0; //wheel_speed[rad/s] =(delta_pulses)*speed_constant
 
 void setup() {
@@ -62,32 +63,29 @@ void setup() {
 	pinMode(LEFT_MOT_EN, OUTPUT);
 	pinMode(LEFT_MOT_DIR_BACK, OUTPUT);
 	pinMode(LEFT_MOT_DIR_FRONT, OUTPUT);
-	digitalWrite(LEFT_MOT_DIR_BACK, LOW);
-	digitalWrite(LEFT_MOT_DIR_FRONT, HIGH);
+	digitalWrite(LEFT_MOT_DIR_BACK, HIGH);
+	digitalWrite(LEFT_MOT_DIR_FRONT, LOW);
 }
 
 long oldPosition = -999;
-long newPosition =0;
+long newPosition = 0;
 
 void loop() {
 
 	myPID.Compute();
-	analogWrite(LEFT_MOT_EN, 100);
+	analogWrite(LEFT_MOT_EN, 255);
 	t.update();
 }
-
 
 //This function is called when t Timer is called
 void read_wheel_vel() {
 	newPosition = myEnc.read();
 
-
 	double delta_pulses = 0;
-	delta_pulses = (double) newPosition- oldPosition;
+	delta_pulses = (double) newPosition - oldPosition;
 	wheel_speed = delta_pulses * speed_constant;
 	//Serial.println(vel);
-	Serial.println(radpsec2rpm(wheel_speed),12);
-
+	Serial.println(radpsec2rpm(wheel_speed), 12);
 
 	digitalWrite(LED, !digitalRead(LED));
 	oldPosition = newPosition;
@@ -101,9 +99,9 @@ void read_wheel_vel() {
  * 			      [sec]            1[min]       2PI [rad]
  *
  */
-double radpsec2rpm(double vel_radpsec){
+double radpsec2rpm(double vel_radpsec) {
 
-   double vel_rpm= ((vel_radpsec)*60)/(2*PI);
-   return vel_rpm;
+	double vel_rpm = ((vel_radpsec) * 60) / (2 * PI);
+	return vel_rpm;
 }
 
