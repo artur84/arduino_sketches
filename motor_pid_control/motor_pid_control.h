@@ -44,7 +44,7 @@
 #define CONTROL_RATE 20 //How often, in milliseconds, the PID will be evaluated. (int>0)
 #define OK_RATE  3000   //How often, in milliseconds, the OK message will be sent. (int>0)
 #define ODOMETRY_RATE  20   //How often, in milliseconds, the ODOMETRY message will be sent. (int>0)
-#define READ_ENCODER_RATE 100.0 //How often to read the encoders in miliseconds
+#define READ_ENCODER_RATE_MILLIS 100.0 //How often to read the encoders in miliseconds
 
 //end of add your includes here
 #ifdef __cplusplus

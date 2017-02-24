@@ -18,9 +18,36 @@ Encoder myEnc(LEFT_ENC_A, LEFT_ENC_B);
 
 Timer t;
 
-//Define a time variable we don't want to do at running time
-double inverse_time = 1.0/(READ_ENCODER_RATE*1000.0*ENCODER_PULSES);
-
+/***
+ * To compute the wheel vel from encoder pulses
+ *
+ * 			8400 pulses  ----> 1 rev
+ * 			delta_pulses ----> delta_rev
+ *
+ * delta_rev = delta_pulses/8400  [rev]
+ *
+ *-------------
+ * In Radians
+ * ------------
+ * 			1 rev 	 ----> 2*pi [rad]
+ * 	       delta_rev ----> 2*pi*delta_rev [rad] = delta_rad
+ *
+ * Wheel speed in rad/s
+ * wheel_speed[rad/s] = delta_rad[rad]/Delta_t[s]
+ *
+ * delta_t_s = delta_t_ms/1000
+ *
+ * wheel_speed[rad/s]=delta_rad/(delta_t_ms/1000)
+ * 					 =delta_rad*1000/(delta_t_ms)
+ * 					 =2pi*delta_rev*1000/delta_t_ms
+ * 					 =2pi*delta_pulses*1000/(8400*delta_t_ms)
+ * 					 =(delta_pulses)(2000*pi/(8400*delta_t_ms))
+ *wheel_speed[rad/s] =(delta_pulses)*speed_constant
+ *
+ * (2000*PI)/(ENCODER_PULSES*READ_ENCODER_RATE_MILLIS) ===> speed_constant
+ */
+const double speed_constant = (2000*PI)/(ENCODER_PULSES*READ_ENCODER_RATE_MILLIS); //wheel_speed[rad/s] =(Delta_pulses)*speed_constant
+double wheel_speed = 0; //wheel_speed[rad/s] =(delta_pulses)*speed_constant
 
 void setup() {
 	//initialize the variables we're linked to
@@ -30,7 +57,7 @@ void setup() {
 	myPID.SetMode(AUTOMATIC);
 	Serial.begin(9600);
 	pinMode(LED, OUTPUT);
-	t.every(READ_ENCODER_RATE, read_encoder);
+	t.every(READ_ENCODER_RATE_MILLIS, read_wheel_vel);
 }
 
 long oldPosition = -999;
@@ -45,15 +72,15 @@ void loop() {
 
 
 //This function is called when t Timer is called
-void read_encoder() {
+void read_wheel_vel() {
 	newPosition = myEnc.read();
 
-	double vel = 0;
-	double delta_pose = 0;
-	delta_pose = (double) oldPosition - newPosition;
-	vel = (2 * PI * delta_pose) * inverse_time;
+
+	double delta_pulses = 0;
+	delta_pulses = (double) newPosition- oldPosition;
+	wheel_speed = delta_pulses * speed_constant;
 	//Serial.println(vel);
-	Serial.println(inverse_time,12);
+	Serial.println(wheel_speed,12);
 
 
 	digitalWrite(LED, !digitalRead(LED));
@@ -61,13 +88,3 @@ void read_encoder() {
 	//Serial.println("hola");
 }
 
-void compute_angular_speed(){
-
-}
-
-///***This function takes as input the current and last encoder poses,
-// * and gives back the angular velocity of the wheel.
-// */
-//double wheel_vel_from_encoder() {
-//
-//}
