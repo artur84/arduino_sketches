@@ -58,6 +58,12 @@ void setup() {
 	Serial.begin(9600);
 	pinMode(LED, OUTPUT);
 	t.every(READ_ENCODER_RATE_MILLIS, read_wheel_vel);
+	/*** Enable motor ***/
+	pinMode(LEFT_MOT_EN, OUTPUT);
+	pinMode(LEFT_MOT_DIR_BACK, OUTPUT);
+	pinMode(LEFT_MOT_DIR_FRONT, OUTPUT);
+	digitalWrite(LEFT_MOT_DIR_BACK, LOW);
+	digitalWrite(LEFT_MOT_DIR_FRONT, HIGH);
 }
 
 long oldPosition = -999;
@@ -66,7 +72,7 @@ long newPosition =0;
 void loop() {
 
 	myPID.Compute();
-	analogWrite(3, Output);
+	analogWrite(LEFT_MOT_EN, 100);
 	t.update();
 }
 
@@ -80,11 +86,24 @@ void read_wheel_vel() {
 	delta_pulses = (double) newPosition- oldPosition;
 	wheel_speed = delta_pulses * speed_constant;
 	//Serial.println(vel);
-	Serial.println(wheel_speed,12);
+	Serial.println(radpsec2rpm(wheel_speed),12);
 
 
 	digitalWrite(LED, !digitalRead(LED));
 	oldPosition = newPosition;
 	//Serial.println("hola");
+}
+
+/*** Takes wheel speed in rad/s and returns it in rpm
+ *
+ * 			vel_radpsec [rad]     60 [sec]     1 [rev]
+ * vel_rpm= -----------------  *  --------- * -----------
+ * 			      [sec]            1[min]       2PI [rad]
+ *
+ */
+double radpsec2rpm(double vel_radpsec){
+
+   double vel_rpm= ((vel_radpsec)*60)/(2*PI);
+   return vel_rpm;
 }
 
