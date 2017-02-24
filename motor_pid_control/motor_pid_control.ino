@@ -48,7 +48,7 @@ Timer t;
  */
 const double speed_constant = (2000 * PI)
 		/ (ENCODER_PULSES * READ_ENCODER_RATE_MILLIS); //wheel_speed[rad/s] =(Delta_pulses)*speed_constant
-double wheel_speed = 0; //wheel_speed[rad/s] =(delta_pulses)*speed_constant
+double wheel_speed_rad = 0; //wheel_speed[rad/s] =(delta_pulses)*speed_constant
 
 void setup() {
 	//initialize the variables we're linked to
@@ -56,15 +56,15 @@ void setup() {
 	Setpoint = 100;
 	//turn the PID on
 	myPID.SetMode(AUTOMATIC);
-	Serial.begin(9600);
+	Serial.begin(115200);
 	pinMode(LED, OUTPUT);
 	t.every(READ_ENCODER_RATE_MILLIS, read_wheel_vel);
 	/*** Enable motor ***/
 	pinMode(LEFT_MOT_EN, OUTPUT);
 	pinMode(LEFT_MOT_DIR_BACK, OUTPUT);
 	pinMode(LEFT_MOT_DIR_FRONT, OUTPUT);
-	digitalWrite(LEFT_MOT_DIR_BACK, HIGH);
-	digitalWrite(LEFT_MOT_DIR_FRONT, LOW);
+	digitalWrite(LEFT_MOT_DIR_BACK, LOW);
+	digitalWrite(LEFT_MOT_DIR_FRONT, HIGH);
 }
 
 long oldPosition = -999;
@@ -72,24 +72,24 @@ long newPosition = 0;
 
 void loop() {
 
-	myPID.Compute();
-	analogWrite(LEFT_MOT_EN, 255);
+	//myPID.Compute();
+	analogWrite(LEFT_MOT_EN, 35);
+	//Serial.println(vel);
+	if (millis() % 1000 == 1) {
+		double display_speed =wheel_speed_rad;
+		Serial.println(radpsec2rpm(display_speed), 2);
+	}
 	t.update();
 }
 
 //This function is called when t Timer is called
 void read_wheel_vel() {
 	newPosition = myEnc.read();
-
-	double delta_pulses = 0;
-	delta_pulses = (double) newPosition - oldPosition;
-	wheel_speed = delta_pulses * speed_constant;
-	//Serial.println(vel);
-	Serial.println(radpsec2rpm(wheel_speed), 12);
-
-	digitalWrite(LED, !digitalRead(LED));
+	long delta_pulses = 0;
+	delta_pulses = (long) newPosition - oldPosition;
+	wheel_speed_rad = delta_pulses * speed_constant;
+	//update old position
 	oldPosition = newPosition;
-	//Serial.println("hola");
 }
 
 /*** Takes wheel speed in rad/s and returns it in rpm
@@ -105,3 +105,16 @@ double radpsec2rpm(double vel_radpsec) {
 	return vel_rpm;
 }
 
+/*** Takes wheel speed in rad/s and returns it in rpm
+ *
+ * 1 rev = 2*PI*radius [m]
+ *
+ * 			vel_radpsec [rad]      1 [rev]     2PI* radius[m]
+ * vel_rpm= -----------------  *  --------- * ------------------ *
+ * 			      [sec]           2PI [rad]        1 [rev]
+ *
+ */
+double radpsec2meterpsec(double vel_radpsec) {
+	double vel_meterpsec = vel_radpsec * WHEELRAD; //WHEELRAD is in meters
+	return vel_meterpsec;
+}
