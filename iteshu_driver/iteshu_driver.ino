@@ -39,7 +39,7 @@ double vr_controlled = 0, vl_controlled = 0; //[pwm] 0-255
 double wl_desired = 0, wl_measured = 0; //[rad/sec]
 
 //Define the aggressive and conservative Tuning Parameters
-double consKp = 50, consKi = 0.1, consKd = 0.01;
+double consKp = 70.0, consKi = 10.0, consKd = 0.08;
 
 //Specify the links and initial tuning parameters
 PID PID_R(&wr_measured, &vr_controlled, &wr_desired, consKp, consKi, consKd,
@@ -252,8 +252,7 @@ void setup() {
  * Arduino MAIN LOOP
  */
 void loop() {
-	newPositionD = myEncD.read();
-	newPositionI = myEncI.read();
+
 	//I will just keep the loop waiting for a message
 	//in the ros topic
 
@@ -261,6 +260,8 @@ void loop() {
 		//TODO: here we should publish the odometry message
 
 		delta_t_us = ODOMETRY_RATE*1000; //Time in us
+		newPositionD = myEncD.read();
+		newPositionI = myEncI.read();
 
 		rwheel_pose.data = newPositionD; //Position in ticks
 		lwheel_pose.data = newPositionI; //Position in ticks
