@@ -28,6 +28,7 @@
 #define LEFT_MOT_DIR_BACK 50
 #define LEFT_MOT_DIR_FRONT 51
 #define LEFT_MOT_EN 3 //enable
+#define ENCODER_FILTER_SIZE 5  //numbers of samples to consider in the media filter
 
 #define BACKWARD -1  //moves backwards
 #define FORWARD 1
@@ -44,7 +45,7 @@
 #define CONTROL_RATE 20 //How often, in milliseconds, the PID will be evaluated. (int>0)
 #define OK_RATE  3000   //How often, in milliseconds, the OK message will be sent. (int>0)
 #define ODOMETRY_RATE  20   //How often, in milliseconds, the ODOMETRY message will be sent. (int>0)
-#define READ_ENCODER_RATE_MILLIS 5.0 //How often to read the encoders in miliseconds
+#define READ_ENCODER_RATE_MILLIS 3.0 //How often to read the encoders in miliseconds
 
 //end of add your includes here
 #ifdef __cplusplus

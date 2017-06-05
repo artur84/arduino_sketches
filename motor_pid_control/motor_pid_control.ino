@@ -7,7 +7,8 @@
 
 //Define Variables we'll be connecting to
 double Setpoint, Input, Output;
-
+double filter_vect[ENCODER_FILTER_SIZE];
+int index = 0;
 //Specify the links and initial tuning parameters
 PID myPID(&Input, &Output, &Setpoint, 2, 5, 1, DIRECT);
 
@@ -73,10 +74,10 @@ long newPosition = 0;
 void loop() {
 
 	//myPID.Compute();
-	analogWrite(LEFT_MOT_EN, 35);
+	analogWrite(LEFT_MOT_EN, 255);
 	//Serial.println(vel);
 	if (millis() % 1000 == 1) {
-		double display_speed =wheel_speed_rad;
+		double display_speed = wheel_speed_rad;
 		Serial.println(radpsec2rpm(display_speed), 2);
 	}
 	t.update();
@@ -85,9 +86,11 @@ void loop() {
 //This function is called when t Timer is called
 void read_wheel_vel() {
 	newPosition = myEnc.read();
+	double speed_rad=0;
 	long delta_pulses = 0;
 	delta_pulses = (long) newPosition - oldPosition;
-	wheel_speed_rad = delta_pulses * speed_constant;
+	speed_rad = delta_pulses * speed_constant;
+	wheel_speed_rad = encoder_filter(speed_rad);
 	//update old position
 	oldPosition = newPosition;
 }
@@ -117,4 +120,27 @@ double radpsec2rpm(double vel_radpsec) {
 double radpsec2meterpsec(double vel_radpsec) {
 	double vel_meterpsec = vel_radpsec * WHEELRAD; //WHEELRAD is in meters
 	return vel_meterpsec;
+}
+
+/*** Filters encoder measurements with a movin median filter
+ *
+ */
+double encoder_filter(double new_measurement) {
+	double sum = 0, average = 0;
+	/***
+	 * --> move vector to the right
+	 *   [__,_i_,_i+1_,__]
+	 */
+	for (int i = 0; i < ENCODER_FILTER_SIZE - 1; ++i) {
+		filter_vect[i + 1] = filter_vect[i];
+	}
+	filter_vect[0] = new_measurement;
+	/***
+	 * Compute the average
+	 */
+	for (int i = 0; i < ENCODER_FILTER_SIZE; ++i) {
+		sum = filter_vect[i] + sum;
+	}
+	average = sum / ENCODER_FILTER_SIZE;
+	return average;
 }
