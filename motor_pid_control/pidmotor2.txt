@@ -1,0 +1,83 @@
+#include <Encoder.h>
+#include <math.h>
+int motor=12;
+Encoder myEnc(20, 21);
+unsigned long lastTime = 0;
+unsigned newTime;
+double newPosition=0 , oldPosition=0,  posicion = 0,delta_t=0;
+///////////////////////////////////////////////////////////////////
+float ref=50;   // referencia.
+double rpm;                 // Salida
+double error;              // error
+double errorPass=0;          // Suma del error para la parte integral
+double errorAnt=0;           // error anterior para la derivada
+double U; 
+
+//////////////////////////constantes del control//////////////////
+int tiempoMuestreo=0.1; ///////tiempo de muestreo.
+double Kp=0.1; //constante del controlador;
+double Ki=1;
+double Kd=0.0001;
+//////////////////////////////////////////////
+
+void setup(void)
+{
+  pinMode(motor,OUTPUT);
+  Serial.begin(9600);
+ 
+}
+void loop(void){
+  //////////////////////lectura del encoder/////////////////////////
+    
+  newPosition = myEnc.read(); 
+  newTime = millis ();
+  if (newPosition != oldPosition){
+  delta_t = newTime - lastTime;
+  posicion = newPosition - oldPosition;
+
+  rpm = (posicion/delta_t)*7.1428; //////////////////// el numero 7.1428 sale de la serie de operaciones para la convercion de pulsos que 
+                                                         //envia el encoder a RPM.
+
+   }       
+   else
+   {
+   rpm=0;  
+   }
+   ///////////////control proporcinal para motor,////////////////////.
+  
+     
+     if(delta_t >= tiempoMuestreo){
+      error = ref - rpm;
+      errorPass=error*tiempoMuestreo+errorPass;        
+      double errorD =(error-errorAnt)/tiempoMuestreo;  // cálculo derivativo 
+      float P=Kp*error;                                // control proporcional
+      float I=Ki*errorPass;                            // control Integral
+      float D=Kd*errorD;
+      
+       U=(P+I+D)+U;   
+   Serial.println("U");
+   Serial.println(U,3);
+   
+      lastTime = newTime;  
+      errorAnt=error;
+ //////////////////////////////////////////////////////////////////
+    }
+    if(U < 0)
+    {
+      U =0;
+    }
+    if(U > 255)
+    {
+      U =255;
+    }
+    
+   Serial.println("/////////");
+   Serial.println("RPM");
+   Serial.println(rpm,3);
+   
+   analogWrite(motor,U);
+   oldPosition = newPosition; 
+  
+ 
+
+}
