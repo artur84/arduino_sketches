@@ -22,11 +22,11 @@
  * Define the material
  ******************************/
 //Para los encoders
-#define ENCDA 20  //ENCODER DERECHO A (YELLOW)
-#define ENCDB 21    //ENCONDER DERECHO B (WHITE)
+#define RIGHT_ENC_A 20  //ENCODER DERECHO A (YELLOW)
+#define RIGHT_ENC_B 21    //ENCONDER DERECHO B (WHITE)
 
-#define ENCIA 19  //ENCODER IZQUIERDO A (YELLOW)
-#define ENCIB 18    //ENCONDER IZQUIERDO B (WHITE)
+#define LEFT_ENC_A 19  //ENCODER IZQUIERDO A (YELLOW)
+#define LEFT_ENC_B 18    //ENCONDER IZQUIERDO B (WHITE)
 
 //para MOVER EL MOTOR
 #define MOTORD_PINA  2

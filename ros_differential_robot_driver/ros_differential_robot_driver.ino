@@ -16,8 +16,8 @@ volatile float vl, vr;
 Motor left_motor, right_motor;
 
 //   avoid using pins with LEDs attached
-Encoder myEncD(ENCDA,ENCDB);
-Encoder myEncI(ENCIA,ENCIB);
+Encoder myEncD(RIGHT_ENC_A,RIGHT_ENC_B);
+Encoder myEncI(LEFT_ENC_A,LEFT_ENC_B);
 
 
 //Creates the ROS publishers and subscribers
