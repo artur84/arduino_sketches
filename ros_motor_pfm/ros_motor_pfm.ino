@@ -9,11 +9,11 @@
 #include <Arduino.h>
 #include "Timer.h"
 #define LED 13
-#define LEFT_MOT_POS 6
-#define LEFT_MOT_NEG 5
+#define LEFT_MOT_DIR_FRONT 6
+#define LEFT_MOT_DIR_BACK 5
 #define LEFT_MOT_EN 7 //enable
-#define RIGHT_MOT_POS 3
-#define RIGHT_MOT_NEG 2
+#define RIGHT__MOT_DIR_FRONT 3
+#define RIGHT_MOT_DIR_BACK 2
 #define RIGHT_MOT_EN 4 //enable
 
 Timer t; //creates the timer
@@ -26,15 +26,15 @@ void setup() {
 	int put_high_event = t.every(T, putHigh);
 
 	pinMode(LED, OUTPUT);
-	pinMode(LEFT_MOT_POS, OUTPUT);
-	pinMode(LEFT_MOT_NEG, OUTPUT);
-	pinMode(RIGHT_MOT_POS, OUTPUT);
-	pinMode(RIGHT_MOT_NEG, OUTPUT);
+	pinMode(LEFT_MOT_DIR_FRONT, OUTPUT);
+	pinMode(LEFT_MOT_DIR_BACK, OUTPUT);
+	pinMode(RIGHT__MOT_DIR_FRONT, OUTPUT);
+	pinMode(RIGHT_MOT_DIR_BACK, OUTPUT);
 
-	digitalWrite(LEFT_MOT_POS, LOW);
-	digitalWrite(LEFT_MOT_NEG, HIGH);
-	digitalWrite(RIGHT_MOT_POS, LOW);
-	digitalWrite(RIGHT_MOT_NEG, HIGH);
+	digitalWrite(LEFT_MOT_DIR_FRONT, LOW);
+	digitalWrite(LEFT_MOT_DIR_BACK, HIGH);
+	digitalWrite(RIGHT__MOT_DIR_FRONT, LOW);
+	digitalWrite(RIGHT_MOT_DIR_BACK, HIGH);
 
 }
 
