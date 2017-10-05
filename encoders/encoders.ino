@@ -5,7 +5,7 @@
 //The encoder best performance is achieved when using interrupts
 //Pin 18,19,20 and 21 have interruptions in arduino MEGA
 
-Encoder myEnc(20,21);
+Encoder myEnc(2,3);
 //   avoid using pins with LEDs attached
 
 void setup() {
