@@ -12,8 +12,10 @@ namespace base_local_planner
   class Position2DInt : public ros::Msg
   {
     public:
-      int64_t x;
-      int64_t y;
+      typedef int64_t _x_type;
+      _x_type x;
+      typedef int64_t _y_type;
+      _y_type y;
 
     Position2DInt():
       x(0),

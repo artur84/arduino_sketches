@@ -14,8 +14,10 @@ static const char MAKENAVPLAN[] = "navfn/MakeNavPlan";
   class MakeNavPlanRequest : public ros::Msg
   {
     public:
-      geometry_msgs::PoseStamped start;
-      geometry_msgs::PoseStamped goal;
+      typedef geometry_msgs::PoseStamped _start_type;
+      _start_type start;
+      typedef geometry_msgs::PoseStamped _goal_type;
+      _goal_type goal;
 
     MakeNavPlanRequest():
       start(),
@@ -47,11 +49,14 @@ static const char MAKENAVPLAN[] = "navfn/MakeNavPlan";
   class MakeNavPlanResponse : public ros::Msg
   {
     public:
-      uint8_t plan_found;
-      const char* error_message;
-      uint8_t path_length;
-      geometry_msgs::PoseStamped st_path;
-      geometry_msgs::PoseStamped * path;
+      typedef uint8_t _plan_found_type;
+      _plan_found_type plan_found;
+      typedef const char* _error_message_type;
+      _error_message_type error_message;
+      uint32_t path_length;
+      typedef geometry_msgs::PoseStamped _path_type;
+      _path_type st_path;
+      _path_type * path;
 
     MakeNavPlanResponse():
       plan_found(0),
@@ -66,15 +71,16 @@ static const char MAKENAVPLAN[] = "navfn/MakeNavPlan";
       *(outbuffer + offset + 0) = (this->plan_found >> (8 * 0)) & 0xFF;
       offset += sizeof(this->plan_found);
       uint32_t length_error_message = strlen(this->error_message);
-      memcpy(outbuffer + offset, &length_error_message, sizeof(uint32_t));
+      varToArr(outbuffer + offset, length_error_message);
       offset += 4;
       memcpy(outbuffer + offset, this->error_message, length_error_message);
       offset += length_error_message;
-      *(outbuffer + offset++) = path_length;
-      *(outbuffer + offset++) = 0;
-      *(outbuffer + offset++) = 0;
-      *(outbuffer + offset++) = 0;
-      for( uint8_t i = 0; i < path_length; i++){
+      *(outbuffer + offset + 0) = (this->path_length >> (8 * 0)) & 0xFF;
+      *(outbuffer + offset + 1) = (this->path_length >> (8 * 1)) & 0xFF;
+      *(outbuffer + offset + 2) = (this->path_length >> (8 * 2)) & 0xFF;
+      *(outbuffer + offset + 3) = (this->path_length >> (8 * 3)) & 0xFF;
+      offset += sizeof(this->path_length);
+      for( uint32_t i = 0; i < path_length; i++){
       offset += this->path[i].serialize(outbuffer + offset);
       }
       return offset;
@@ -86,7 +92,7 @@ static const char MAKENAVPLAN[] = "navfn/MakeNavPlan";
       this->plan_found =  ((uint8_t) (*(inbuffer + offset)));
       offset += sizeof(this->plan_found);
       uint32_t length_error_message;
-      memcpy(&length_error_message, (inbuffer + offset), sizeof(uint32_t));
+      arrToVar(length_error_message, (inbuffer + offset));
       offset += 4;
       for(unsigned int k= offset; k< offset+length_error_message; ++k){
           inbuffer[k-1]=inbuffer[k];
@@ -94,12 +100,15 @@ static const char MAKENAVPLAN[] = "navfn/MakeNavPlan";
       inbuffer[offset+length_error_message-1]=0;
       this->error_message = (char *)(inbuffer + offset-1);
       offset += length_error_message;
-      uint8_t path_lengthT = *(inbuffer + offset++);
+      uint32_t path_lengthT = ((uint32_t) (*(inbuffer + offset))); 
+      path_lengthT |= ((uint32_t) (*(inbuffer + offset + 1))) << (8 * 1); 
+      path_lengthT |= ((uint32_t) (*(inbuffer + offset + 2))) << (8 * 2); 
+      path_lengthT |= ((uint32_t) (*(inbuffer + offset + 3))) << (8 * 3); 
+      offset += sizeof(this->path_length);
       if(path_lengthT > path_length)
         this->path = (geometry_msgs::PoseStamped*)realloc(this->path, path_lengthT * sizeof(geometry_msgs::PoseStamped));
-      offset += 3;
       path_length = path_lengthT;
-      for( uint8_t i = 0; i < path_length; i++){
+      for( uint32_t i = 0; i < path_length; i++){
       offset += this->st_path.deserialize(inbuffer + offset);
         memcpy( &(this->path[i]), &(this->st_path), sizeof(geometry_msgs::PoseStamped));
       }

@@ -13,16 +13,23 @@ static const char SETPIDGAINS[] = "control_toolbox/SetPidGains";
   class SetPidGainsRequest : public ros::Msg
   {
     public:
-      float p;
-      float i;
-      float d;
-      float i_clamp;
+      typedef float _p_type;
+      _p_type p;
+      typedef float _i_type;
+      _i_type i;
+      typedef float _d_type;
+      _d_type d;
+      typedef float _i_clamp_type;
+      _i_clamp_type i_clamp;
+      typedef bool _antiwindup_type;
+      _antiwindup_type antiwindup;
 
     SetPidGainsRequest():
       p(0),
       i(0),
       d(0),
-      i_clamp(0)
+      i_clamp(0),
+      antiwindup(0)
     {
     }
 
@@ -33,6 +40,13 @@ static const char SETPIDGAINS[] = "control_toolbox/SetPidGains";
       offset += serializeAvrFloat64(outbuffer + offset, this->i);
       offset += serializeAvrFloat64(outbuffer + offset, this->d);
       offset += serializeAvrFloat64(outbuffer + offset, this->i_clamp);
+      union {
+        bool real;
+        uint8_t base;
+      } u_antiwindup;
+      u_antiwindup.real = this->antiwindup;
+      *(outbuffer + offset + 0) = (u_antiwindup.base >> (8 * 0)) & 0xFF;
+      offset += sizeof(this->antiwindup);
       return offset;
     }
 
@@ -43,11 +57,19 @@ static const char SETPIDGAINS[] = "control_toolbox/SetPidGains";
       offset += deserializeAvrFloat64(inbuffer + offset, &(this->i));
       offset += deserializeAvrFloat64(inbuffer + offset, &(this->d));
       offset += deserializeAvrFloat64(inbuffer + offset, &(this->i_clamp));
+      union {
+        bool real;
+        uint8_t base;
+      } u_antiwindup;
+      u_antiwindup.base = 0;
+      u_antiwindup.base |= ((uint8_t) (*(inbuffer + offset + 0))) << (8 * 0);
+      this->antiwindup = u_antiwindup.real;
+      offset += sizeof(this->antiwindup);
      return offset;
     }
 
     const char * getType(){ return SETPIDGAINS; };
-    const char * getMD5(){ return "b06494a6fc3d5b972ded4e2a9a71535a"; };
+    const char * getMD5(){ return "4a43159879643e60937bf2893b633607"; };
 
   };
 

@@ -13,11 +13,14 @@ static const char SETCOSTMAP[] = "navfn/SetCostmap";
   class SetCostmapRequest : public ros::Msg
   {
     public:
-      uint8_t costs_length;
-      uint8_t st_costs;
-      uint8_t * costs;
-      uint16_t height;
-      uint16_t width;
+      uint32_t costs_length;
+      typedef uint8_t _costs_type;
+      _costs_type st_costs;
+      _costs_type * costs;
+      typedef uint16_t _height_type;
+      _height_type height;
+      typedef uint16_t _width_type;
+      _width_type width;
 
     SetCostmapRequest():
       costs_length(0), costs(NULL),
@@ -29,11 +32,12 @@ static const char SETCOSTMAP[] = "navfn/SetCostmap";
     virtual int serialize(unsigned char *outbuffer) const
     {
       int offset = 0;
-      *(outbuffer + offset++) = costs_length;
-      *(outbuffer + offset++) = 0;
-      *(outbuffer + offset++) = 0;
-      *(outbuffer + offset++) = 0;
-      for( uint8_t i = 0; i < costs_length; i++){
+      *(outbuffer + offset + 0) = (this->costs_length >> (8 * 0)) & 0xFF;
+      *(outbuffer + offset + 1) = (this->costs_length >> (8 * 1)) & 0xFF;
+      *(outbuffer + offset + 2) = (this->costs_length >> (8 * 2)) & 0xFF;
+      *(outbuffer + offset + 3) = (this->costs_length >> (8 * 3)) & 0xFF;
+      offset += sizeof(this->costs_length);
+      for( uint32_t i = 0; i < costs_length; i++){
       *(outbuffer + offset + 0) = (this->costs[i] >> (8 * 0)) & 0xFF;
       offset += sizeof(this->costs[i]);
       }
@@ -49,12 +53,15 @@ static const char SETCOSTMAP[] = "navfn/SetCostmap";
     virtual int deserialize(unsigned char *inbuffer)
     {
       int offset = 0;
-      uint8_t costs_lengthT = *(inbuffer + offset++);
+      uint32_t costs_lengthT = ((uint32_t) (*(inbuffer + offset))); 
+      costs_lengthT |= ((uint32_t) (*(inbuffer + offset + 1))) << (8 * 1); 
+      costs_lengthT |= ((uint32_t) (*(inbuffer + offset + 2))) << (8 * 2); 
+      costs_lengthT |= ((uint32_t) (*(inbuffer + offset + 3))) << (8 * 3); 
+      offset += sizeof(this->costs_length);
       if(costs_lengthT > costs_length)
         this->costs = (uint8_t*)realloc(this->costs, costs_lengthT * sizeof(uint8_t));
-      offset += 3;
       costs_length = costs_lengthT;
-      for( uint8_t i = 0; i < costs_length; i++){
+      for( uint32_t i = 0; i < costs_length; i++){
       this->st_costs =  ((uint8_t) (*(inbuffer + offset)));
       offset += sizeof(this->st_costs);
         memcpy( &(this->costs[i]), &(this->st_costs), sizeof(uint8_t));

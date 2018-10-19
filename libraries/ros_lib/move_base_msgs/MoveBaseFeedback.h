@@ -13,7 +13,8 @@ namespace move_base_msgs
   class MoveBaseFeedback : public ros::Msg
   {
     public:
-      geometry_msgs::PoseStamped base_position;
+      typedef geometry_msgs::PoseStamped _base_position_type;
+      _base_position_type base_position;
 
     MoveBaseFeedback():
       base_position()

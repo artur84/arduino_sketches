@@ -15,9 +15,12 @@ namespace move_base_msgs
   class MoveBaseActionGoal : public ros::Msg
   {
     public:
-      std_msgs::Header header;
-      actionlib_msgs::GoalID goal_id;
-      move_base_msgs::MoveBaseGoal goal;
+      typedef std_msgs::Header _header_type;
+      _header_type header;
+      typedef actionlib_msgs::GoalID _goal_id_type;
+      _goal_id_type goal_id;
+      typedef move_base_msgs::MoveBaseGoal _goal_type;
+      _goal_type goal;
 
     MoveBaseActionGoal():
       header(),

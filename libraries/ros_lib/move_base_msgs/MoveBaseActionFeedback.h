@@ -15,9 +15,12 @@ namespace move_base_msgs
   class MoveBaseActionFeedback : public ros::Msg
   {
     public:
-      std_msgs::Header header;
-      actionlib_msgs::GoalStatus status;
-      move_base_msgs::MoveBaseFeedback feedback;
+      typedef std_msgs::Header _header_type;
+      _header_type header;
+      typedef actionlib_msgs::GoalStatus _status_type;
+      _status_type status;
+      typedef move_base_msgs::MoveBaseFeedback _feedback_type;
+      _feedback_type feedback;
 
     MoveBaseActionFeedback():
       header(),

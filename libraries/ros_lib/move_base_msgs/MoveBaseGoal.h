@@ -13,7 +13,8 @@ namespace move_base_msgs
   class MoveBaseGoal : public ros::Msg
   {
     public:
-      geometry_msgs::PoseStamped target_pose;
+      typedef geometry_msgs::PoseStamped _target_pose_type;
+      _target_pose_type target_pose;
 
     MoveBaseGoal():
       target_pose()

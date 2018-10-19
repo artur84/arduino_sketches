@@ -15,9 +15,12 @@ namespace move_base_msgs
   class MoveBaseAction : public ros::Msg
   {
     public:
-      move_base_msgs::MoveBaseActionGoal action_goal;
-      move_base_msgs::MoveBaseActionResult action_result;
-      move_base_msgs::MoveBaseActionFeedback action_feedback;
+      typedef move_base_msgs::MoveBaseActionGoal _action_goal_type;
+      _action_goal_type action_goal;
+      typedef move_base_msgs::MoveBaseActionResult _action_result_type;
+      _action_result_type action_result;
+      typedef move_base_msgs::MoveBaseActionFeedback _action_feedback_type;
+      _action_feedback_type action_feedback;
 
     MoveBaseAction():
       action_goal(),
