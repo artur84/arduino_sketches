@@ -41,7 +41,7 @@ void motor_stop() {
 /* Moves the motor in positive sens
 		vel: [0-255] the desired pwm value 255 means full speed
  */
-void motor_forward(int vel) {
+void motor_forward(unsigned int vel) {
 		digitalWrite(MOT1_IN1, 1);
 		digitalWrite(MOT1_IN2, 0);
 		analogWrite(MOT1_EN, vel);
@@ -87,7 +87,6 @@ void setup() {
 	pinMode(MOT1_IN1, OUTPUT);
 	pinMode(MOT1_IN2, OUTPUT);
 	pinMode(MOT1_EN, OUTPUT);
-
 }
 
 /*
