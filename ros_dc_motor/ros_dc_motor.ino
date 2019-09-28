@@ -1,3 +1,4 @@
+//#define USE_USBCON //Uncomment this line if you are using an arduino DUE
 // Do not remove the include below
 #include "ros_dc_motor.h"
 /*
@@ -5,7 +6,7 @@
  * and commands two motors according to the linear.x
  * value of the received Twist.
  *
- * We send the encoders information as a Vector3 message, where the first
+ * We send the encoders information back to the ROS PC as a Vector3 message, where the first
  * element is the left wheel data and the second element is the right wheel data.
  * mantainer: arturoescobedo.iq@gmail.com
  */
@@ -58,7 +59,7 @@ void hard_stop(int motor) {
 		analogWrite(LEFT_MOT_EN, 255);
 	} else if (motor == RIGHT) {
 		//Stop if received an wrong direction
-		digitalWrite(RIGHT__MOT_DIR_FRONT, 1);
+		digitalWrite(RIGHT_MOT_DIR_FRONT, 1);
 		digitalWrite(RIGHT_MOT_DIR_BACK, 1);
 		analogWrite(RIGHT_MOT_EN, 255);
 	}
@@ -68,14 +69,14 @@ void hard_stop(int motor) {
  * motor: LEFT or RIGHT (0 or 1)
  */
 void soft_stop(int motor) {
-	//Stop if received an wrong direction
+	//Stop if received a wrong direction
 	if (motor == LEFT) {
 		digitalWrite(LEFT_MOT_DIR_FRONT, 0);
 		digitalWrite(LEFT_MOT_DIR_BACK, 0);
 		analogWrite(LEFT_MOT_EN, 0);
 	} else if (motor == RIGHT) {
-		//Stop if received an wrong direction
-		digitalWrite(RIGHT__MOT_DIR_FRONT, 0);
+		//Stop if received a wrong direction
+		digitalWrite(RIGHT_MOT_DIR_FRONT, 0);
 		digitalWrite(RIGHT_MOT_DIR_BACK, 0);
 		analogWrite(RIGHT_MOT_EN, 0);
 	}
@@ -85,15 +86,15 @@ void soft_stop(int motor) {
 void move_right_motor(void) {
 	PID_R.Compute();
 	if (vr_controlled >= 1 && vr_controlled <= 255) {
-		digitalWrite(RIGHT__MOT_DIR_FRONT, 1);
+		digitalWrite(RIGHT_MOT_DIR_FRONT, 1);
 		digitalWrite(RIGHT_MOT_DIR_BACK, 0);
 		analogWrite(RIGHT_MOT_EN, vr_controlled);
 	} else if (vr_controlled <= 1 && vr_controlled >= -255) {
-		digitalWrite(RIGHT__MOT_DIR_FRONT, 0);
+		digitalWrite(RIGHT_MOT_DIR_FRONT, 0);
 		digitalWrite(RIGHT_MOT_DIR_BACK, 1);
 		analogWrite(RIGHT_MOT_EN, -1 * vr_controlled);
 	} else {
-		//Stop if received an wrong direction
+		//Stop if received a wrong direction
 		hard_stop (RIGHT);
 	}
 }
@@ -111,13 +112,13 @@ void move_left_motor(void) {
 		digitalWrite(LEFT_MOT_DIR_BACK, 1);
 		analogWrite(LEFT_MOT_EN, -1 * vl_controlled);
 	} else {
-		//Stop if received an wrong direction
+		//Stop if received a wrong direction
 		hard_stop (LEFT);
 	}
 
 }
 
-/***This function takes as input the current and last encoder poses,
+/***This function takes as input the current and last encoder positions,
  * and gives back the angular velocity of the wheel.
  */
 double wheel_vel_from_encoder(long curr_pos, long last_pos, long delta_t_us) {
@@ -147,7 +148,7 @@ void move_robot(double linear, double angular) {
 	move_right_motor();
 }
 
-
+//Publishers  
 ros::Publisher str_pub("arduino/str_output", &ok_rosstr);
 ros::Publisher lwheel_pose_pub("arduino/lwheel", &lwheel_pose);
 ros::Publisher rwheel_pose_pub("arduino/rwheel", &rwheel_pose);
@@ -190,7 +191,7 @@ void setup() {
 	pinMode(LEFT_MOT_DIR_FRONT, OUTPUT);
 	pinMode(LEFT_MOT_EN, OUTPUT);
 	pinMode(RIGHT_MOT_DIR_BACK, OUTPUT);
-	pinMode(RIGHT__MOT_DIR_FRONT, OUTPUT);
+	pinMode(RIGHT_MOT_DIR_FRONT, OUTPUT);
 	pinMode(RIGHT_MOT_EN, OUTPUT);
 
 	//Turn the PID on

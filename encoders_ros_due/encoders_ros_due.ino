@@ -1,6 +1,7 @@
 /*** Program to read one  encoder connected to an arduino DUE
  * This is a simple program that reads an encoder and prints the value to rosserial
  * It publishes the data to the encoder_counter topic.
+ * Connect the USB cabel to the Arduino Due programming port.
  */
 #define USE_USBCON
 #include <ros.h>
