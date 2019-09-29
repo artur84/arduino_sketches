@@ -16,7 +16,7 @@
  ********************************/
 ros::NodeHandle nh;
 volatile float global_linx = 0, global_angz = 0;
-std_msgs::Float32 float_debug;
+//std_msgs::Float32 float_debug;
 
 //Motores
 Motor left_motor, right_motor;
@@ -24,14 +24,13 @@ Motor left_motor, right_motor;
 //Twist callback
 void cmd_vel_cb(const geometry_msgs::Twist& cmd_msg) {
   digitalWrite(LED, HIGH - digitalRead(LED)); //toggles a led
-  //str_pub.publish(&callback_rosstr);
   global_linx = cmd_msg.linear.x;
   global_angz = cmd_msg.angular.z;
 }
 
 //Creates the ROS publishers and subscribers
 ros::Subscriber<geometry_msgs::Twist> cmd_vel_sub("cmd_vel", cmd_vel_cb);
-ros::Publisher float_pub("float_debug", &float_debug);
+//ros::Publisher float_pub("float_debug", &float_debug);
 
 
 
@@ -47,8 +46,8 @@ void move_robot(float linearx, float angularz) {
   int pwm_right = (int) (round(wl));
   
   if ((pwm_left <= 255 && pwm_left >= -255) && (pwm_right <= 255 && pwm_right >= -255)) {
-    float_debug.data=(float)pwm_left;
-    float_pub.publish(&float_debug);
+    //float_debug.data=(float)pwm_left;
+    //float_pub.publish(&float_debug);
     left_motor.move(pwm_left);
     right_motor.move(pwm_right);
   } else { //If some strange command was computed then stop the robot
@@ -67,7 +66,7 @@ void setup() {
 	//nh.getHardware()->setBaud(57600); //The HC06 and 05 use by default 9600 baud rate
 	nh.initNode();
 	nh.subscribe(cmd_vel_sub);
-  nh.advertise(float_pub);
+  //nh.advertise(float_pub);
 	pinMode(LED, OUTPUT);
 	//Initialize motors
 	left_motor.init(MOTORI_PINA, MOTORI_PINB, MOTORI_ENABLE);
