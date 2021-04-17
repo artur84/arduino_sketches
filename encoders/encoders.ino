@@ -7,7 +7,7 @@ Encoder myEnc(2,3);
 //   avoid using pins with LEDs attached
 
 void setup() {
-  Serial.begin(9600);
+  Serial.begin(115200);
   Serial.println("Basic Encoder Test:");
 }
 
