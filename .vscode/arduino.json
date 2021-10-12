@@ -1,0 +1,5 @@
+{
+    "sketch": "Cap14_3_LDR\\Cap14_3_LDR.ino",
+    "board": "arduino:avr:uno",
+    "port": "COM11"
+}
